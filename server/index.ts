@@ -1,5 +1,6 @@
 import Express, { Application } from 'express'
 import Cors from './utils/cors'
+import Routes from './router'
 
 /**
  * Singelton class to create and manage an express server
@@ -17,7 +18,7 @@ export default class Server {
         this.application.use(Express.urlencoded({ extended: true }))
         this.application.use(Express.json())
         this.application.use(Cors())
-        //   this.application.use(Routes)
+          this.application.use(Routes)
     }
 
     public run() {
