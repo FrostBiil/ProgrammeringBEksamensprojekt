@@ -1,5 +1,5 @@
 import Express, { Application } from 'express'
-import Cors from 'cors'
+import Cors from './utils/cors'
 
 /**
  * Singelton class to create and manage an express server
@@ -24,7 +24,7 @@ export default class Server {
         try {
             this.plugins()
             this.application.listen(this.port, () => {
-                console.log(`Server running on http://localhost:${this.port}`)
+                console.log(`Server running on port ${this.port}`)
             })
         } catch (err) {
             console.error(err)
@@ -32,4 +32,5 @@ export default class Server {
         }
     }
 }
+
 new Server().run()
