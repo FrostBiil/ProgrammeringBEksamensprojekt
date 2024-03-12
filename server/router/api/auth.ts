@@ -65,73 +65,63 @@ class AuthRoutes extends Router {
                 clientSecret: process.env.GITHUB_CLIENT_SECRET!,
                 scope: ["user:email", "read:user"],
                 callbackURL: "http://localhost:3000/api/auth/github/callback"
-            }, function (accessToken: any, refreshToken: any, profile: any, done: (err: any, user: any) => void) {
-                console.log(profile, accessToken, refreshToken);
-                return done(null, profile);
+            }, function (accessToken: any, refreshToken: any, profile: IGithubOauthProfile, done: (err: any, user: any) => void) {
+
+                const obj: Omit<User, "joinedAt"> = {
+                    accessToken,
+                    id: profile.id,
+                    displayName: profile.displayName,
+                    username: profile.username,
+                    photo: profile.photos[0].value,
+                    email: profile.emails[0].value,
+                    company: profile._json.company,
+                    location: profile._json.location,
+                };
+
+                prisma.user.upsert({
+                    where: {
+                        id: profile.id
+                    },
+                    create: obj,
+                    update: obj
+                }).then(() => {
+                    return done(null, profile);
+                }).catch((err) => {
+                    return done(err, null);
+                })
             })
         )
 
         passport.serializeUser((user: any, done) => {
-            console.log("Serializing", user);
-            done(null, user);
+            done(null, user.id);
         })
 
-        passport.deserializeUser((user: any, done) => {
-            console.log("Deserializing", user);
-            done(null, user);
+        passport.deserializeUser((id: any, done) => {
+            prisma.user.findUnique({
+                where: { id }
+            }).then((user) => {
+                done(null, user)
+            }).catch((err) => {
+                done(err, null)
+            })
         })
-
-        // passport.serializeUser((user: any, done) => {
-        //     user = user as IGithubOauthProfile;
-        //     const userObject: User = {
-        //         id: user.id,
-
-        //         username: user.username,
-        //         photo: user.photos[0].value,
-        //         displayName: user.displayName,
-        //         email: user.emails[0].value,
-
-        //         company: user._json.company,
-        //         location: user._json.location,
-        //     }
-
-        //     prisma.user.upsert({
-        //         where: {
-        //             id: user.id
-        //         }, 
-        //         update:userObject,
-        //         create: userObject
-        //     }).then(() => {
-        //         done(null, user.id);
-        //     }).catch((err) => {
-        //         done(err, null);
-        //     })
-        // });
-
-        // passport.deserializeUser((userId: string, done) => {
-        //     console.log("Deserializing", userId);
-        //     prisma.user.findUnique({
-        //         where: {
-        //             id: userId
-        //         }
-        //     }).then((user) => {
-        //         console.log("Deserialized", user);
-        //         done(null, user);
-        //     }).catch((err) => {
-        //         done(err, null);
-        //     })
-        // });
-
-
     }
 
     protected routes(): void {
 
-        this.router.get("/", (req, res) => {
+        this.router.get("/me", (req, res) => {
             /**
              * Returner info om brugeren, hvis brugeren er logget ind
              */
-            res.send((req.session as any));
+            const user = req.user as User;
+            if(!user) return res.status(401).json({
+                status: 401,
+                message: "Not logged in"
+            })
+            return res.status(200).json({
+                status: 200,
+                data: user
+            })
         })
 
         this.router.get("/github", passport.authenticate("github"));
@@ -140,7 +130,6 @@ class AuthRoutes extends Router {
             /**
              * Authentication virkede og brugeren er logget ind
              */
-
             res.redirect("/");
         });
     }
