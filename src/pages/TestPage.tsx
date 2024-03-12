@@ -1,26 +1,22 @@
-
+// src/App.tsx
 import React from 'react';
-import { createTheme, MantineProvider } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import '@mantine/core/styles.css';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import TestPage from './pages/TestPage';
+import TestPage from './pages/TestPage'; // Antager, at du har en TestPage komponent
 import Navbar from './components/Navbar';
-
-const theme = createTheme({
-  /** Put your mantine theme override here */
-});
 
 function App() {
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
       <Router>
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/test" element={<TestPage />} />
+          <Route path="/test" element={<TestPage />} /> {/* Tilføj din TestPage Route */}
+          {/* Du kan tilføje flere ruter efter behov */}
         </Routes>
       </Router>
     </MantineProvider>
