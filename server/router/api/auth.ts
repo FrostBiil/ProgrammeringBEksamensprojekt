@@ -70,7 +70,7 @@ class AuthRoutes extends Router {
                 const obj: Omit<User, "joinedAt"> = {
                     accessToken,
                     id: profile.id,
-                    displayName: profile.displayName,
+                    displayName: profile.displayName || profile._json.name || profile.username,
                     username: profile.username,
                     photo: profile.photos[0].value,
                     email: profile.emails[0].value,

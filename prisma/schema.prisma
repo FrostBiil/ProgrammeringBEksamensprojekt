@@ -22,8 +22,8 @@ model Session {
 }
 
 model User {
-  id           String @unique
-  accessToken  String @unique
+  id          String @unique
+  accessToken String @unique
 
   displayName String
   username    String
@@ -34,5 +34,5 @@ model User {
   company  String?
   location String?
 
-  joinedAt DateTime  @default(now())
+  joinedAt DateTime @default(now())
 }
