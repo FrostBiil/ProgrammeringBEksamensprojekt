@@ -15,6 +15,7 @@ export const whiteListDomain = IS_PRODUCTION
   : developmentWhiteList
 
 export const corsOptions: CorsOptions = {
+  credentials: true,
   origin: (origin?, callback?) => {
     if (!origin || whiteListDomain.indexOf(origin) !== -1) {
       callback!(null, true)
