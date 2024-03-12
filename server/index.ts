@@ -3,9 +3,12 @@ import Cors from './utils/cors'
 import Routes from './router'
 import { IS_PRODUCTION } from './utils/config'
 import session from 'express-session'
+import { prisma } from './utils/db'
+import passport from 'passport'
+import { PrismaSessionStore } from './PrismaSessionStore'
 
 /**
- * Singelton class to create and manage an express server
+ * Singelton-klasse til at oprette og administrere en express server
  */
 export default class Server {
     private application: Application
@@ -21,10 +24,12 @@ export default class Server {
         this.application.use(Express.json())
         this.application.use(session({
             secret: process.env.SESSION_SECRET!,
+            store: new PrismaSessionStore(prisma),
             cookie: {
                 secure: IS_PRODUCTION
-            }
+            },
         }))
+        this.application.use(passport.session());
         this.application.use(Cors())
         this.application.use(Routes)
     }
