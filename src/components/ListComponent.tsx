@@ -1,17 +1,17 @@
 import { List, ThemeIcon, rem, useMantineTheme } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
 import { MouseEvent, useState } from "react";
+import React from "react";
 
-function ListGroup() {
+/**  { items: [] , heading: string} **/
+interface Props {
+  items: string[];
+  heading: string;
+  onSelectItem: (item: string) => void;
+}
+
+function ListComponent({ items, heading, onSelectItem }: Props) {
   const theme = useMantineTheme();
-
-  let items = [
-    "Clone or download repository from GitHub",
-    "Install dependencies with yarn",
-    "To start development server run npm start command",
-    "Run tests to make sure your changes do not break the build",
-    "Submit a pull request once you are done",
-  ];
 
   // Funktion vs. Variabel? Vi kan give funktioner parametre, og give forskellige fejlbeskeder afhængig af, hvad der er givet som parameter.
   const getMessage = () => {
@@ -26,7 +26,7 @@ function ListGroup() {
 
   return (
     <>
-      <h1>List Group</h1>
+      <h1>{heading}</h1>
       {getMessage()}
       <List
         spacing="xs"
@@ -41,7 +41,10 @@ function ListGroup() {
         {items.map((item, index) => (
           <List.Item
             key={item}
-            onClick={() => handleClick(index)}
+            onClick={() => {
+              handleClick(index);
+              onSelectItem(item);
+            }}
             style={{
               cursor: "pointer",
               backgroundColor:
@@ -62,4 +65,4 @@ function ListGroup() {
   );
 }
 
-export default ListGroup;
+export default ListComponent;

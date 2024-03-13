@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Api } from '../utils/api'; // Juster stien efter din filstruktur
+import Navbar from '../components/Navbar';
 
 function LoginPage() {
   const handleLogin = async () => {
@@ -21,6 +22,7 @@ function LoginPage() {
   return (
     <div>
       <h1>Login Page</h1>
+      <Navbar/>
       <button onClick={handleLogin}>Login</button>
     </div>
   );

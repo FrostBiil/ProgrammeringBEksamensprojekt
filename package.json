@@ -65,6 +65,7 @@
     "@mantine/notifications": "^7.6.1",
     "@mantine/nprogress": "^7.6.1",
     "@mantine/spotlight": "^7.6.1",
+    "@mantinex/dev-icons": "^1.0.2",
     "@prisma/client": "^5.10.2",
     "@quixo3/prisma-session-store": "^3.1.13",
     "@tabler/icons-react": "^3.0.1",
