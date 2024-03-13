@@ -10,7 +10,11 @@ function LoginPage() {
   useEffect(() => {
     Api.me().then((user) => {
       // Hvis brugeren er logget ind, så vil user være en object med brugerens information
-      console.log(user.data);
+      if (user) {
+        console.log(user)
+      } else {
+        console.log("Not logged in")
+      };
     });
   }, []);
 
