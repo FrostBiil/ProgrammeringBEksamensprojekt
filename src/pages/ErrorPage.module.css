@@ -11,13 +11,13 @@
       Greycliff CF,
       var(--mantine-font-family);
   
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: 768px) {
       font-size: rem(32px);
     }
   }
   
   .control {
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: 768px) {
       width: 100%;
     }
   }

@@ -1,9 +1,10 @@
-import React, { forwardRef } from 'react';
-import { UnstyledButton, Group, Avatar, Text, rem } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
-import classes from './UserButton.module.css';
+import React, { forwardRef, useContext } from "react";
+import { UnstyledButton, Group, Avatar, Text, rem } from "@mantine/core";
+import { IconChevronRight } from "@tabler/icons-react";
+import classes from "./UserButton.module.css";
+import { AuthContext } from "../../contexts/AuthProvider";
 
-interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
+interface UserButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   image: string;
   name: string;
   email: string;
@@ -11,33 +12,36 @@ interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
 }
 
 const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
-  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
-    <UnstyledButton
-      ref={ref}
-      style={{
-        padding: 'var(--mantine-spacing-md)',
-        color: 'var(--mantine-color-text)',
-        borderRadius: 'var(--mantine-radius-sm)',
-      }}
-      {...others}
-    >
-      <Group>
-        <Avatar src={image} radius="xl" />
+  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => {
+    const { user } = useContext(AuthContext);
 
-        <div style={{ flex: 1 }}>
-          <Text size="sm" fw={500}>
-            {name}
-          </Text>
+    return (
+      <UnstyledButton
+        ref={ref}
+        p={"md"}
+        color={"text"}
+        display={"block"}
+        w={"100%"}
+        {...others}
+      >
+        <Group>
+          <Avatar src={user?.photo || image} radius="xl" />
 
-          <Text c="dimmed" size="xs">
-            {email}
-          </Text>
-        </div>
+          <div style={{ flex: 1 }}>
+            <Text size="sm" fw={500}>
+              {user?.displayName}
+            </Text>
 
-        {icon || <IconChevronRight size="1rem" />}
-      </Group>
-    </UnstyledButton>
-  )
+            <Text c="dimmed" size="xs">
+              {user?.email}
+            </Text>
+          </div>
+
+          {icon || <IconChevronRight size="1rem" />}
+        </Group>
+      </UnstyledButton>
+    );
+  }
 );
 
-export default UserButton
+export default UserButton;

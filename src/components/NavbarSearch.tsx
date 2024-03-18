@@ -24,10 +24,10 @@ import classes from "./NavbarSearch.module.css";
 
 const links = [
   { icon: IconHome, label: "Home"},
-  { icon: IconBrandXbox, label: "Games"},
-  { icon: IconBulb, label: "Activity", notifications: 3 },
-  { icon: IconCheckbox, label: "Tasks", notifications: 4 },
-  { icon: IconUser, label: "Contacts" },
+  { icon: IconBrandXbox, label: "Butik"},
+  { icon: IconBulb, label: "Bibliotek" },
+  { icon: IconCheckbox, label: "Udgiv"},
+  { icon: IconUser, label: "Kontankter" },
 ];
 
 const collections = [
@@ -46,14 +46,9 @@ const NavbarSearch: React.FC = () => {
   const mainLinks = links.map((link) => (
     <UnstyledButton key={link.label} className={classes.mainLink}>
       <div className={classes.mainLinkInner}>
-        <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
+        <link.icon size={24} className={classes.mainLinkIcon} stroke={1.5} />
         <span>{link.label}</span>
       </div>
-      {link.notifications && (
-        <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
-          {link.notifications}
-        </Badge>
-      )}
     </UnstyledButton>
   ));
 
