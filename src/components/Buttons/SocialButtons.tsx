@@ -1,6 +1,6 @@
 import { Button, ButtonProps, Group } from '@mantine/core';
 import { GithubIcon } from "@mantinex/dev-icons";
-import classes from "./GithubButton.module.css";
+import classes from "./SocialButton.module.css";
 
 export function GithubButton(
   props: ButtonProps & React.ComponentPropsWithoutRef<"button">
