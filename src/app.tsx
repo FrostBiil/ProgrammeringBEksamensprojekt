@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import Navbar from './components/Navbar';
 import NavbarSearch from './components/NavbarSearch';
+import ErrorPage from './pages/ErrorPage';
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -24,6 +25,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="*" element={<ErrorPage/>} />
             </Routes>
           </div>
         </div>
