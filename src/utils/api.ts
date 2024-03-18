@@ -33,6 +33,11 @@ export class Api {
         window.location.href = this.getEndpoint(`/auth/github?redirect=${redirect}`);
     }
 
+    public static logout() {
+        // /api/auth/logout
+        Api.fetch("/auth/logout");
+    }
+
     public static async me(): Promise<User | null> {
         // Fetch /api/auth/me
         const res = await this.fetch("/auth/me");

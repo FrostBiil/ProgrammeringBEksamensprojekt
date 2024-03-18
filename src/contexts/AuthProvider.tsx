@@ -14,7 +14,8 @@ export function AuthProvider(props: React.PropsWithChildren<{}>) {
   };
 
   const logout = () => {
-    // Log brugeren ud ved at redirecte til /api/auth/logout
+    Api.logout();
+    setUser(null);
   };
 
   useEffect(() => {

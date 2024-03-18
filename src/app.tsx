@@ -1,37 +1,44 @@
 import React from "react";
-import { createTheme, MantineProvider } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "@mantine/core/styles.css";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import NavbarSearch from "./components/NavbarSearch";
-import ErrorPage from "./pages/ErrorPage";
+import { HomePage } from "./pages/HomePage";
+import { ErrorPage } from "./pages/ErrorPage";
 import { AuthProvider } from "./contexts/AuthProvider";
-
-const theme = createTheme({
-  /** Put your mantine theme override here */
-});
+import { Navbar } from "./components/Navbar";
+import { SettingsPage } from "./pages/SettingsPage";
+import { StorePage } from "./pages/StorePage";
+import { LibraryPage } from "./pages/LibraryPage";
+import { UploadPage } from "./pages/UploadPage";
 
 function App() {
   return (
-    <MantineProvider theme={theme}>
-      <AuthProvider>
-        <Router>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div style={{ flex: 1 }}>
-              <NavbarSearch />
-            </div>
-            <div style={{ flex: 3 }}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="*" element={<ErrorPage />} />
-              </Routes>
-            </div>
-          </div>
-        </Router>
-      </AuthProvider>
-    </MantineProvider>
+    <AuthProvider>
+      <AppShell
+        padding={"md"}
+        navbar={{
+          width: 100,
+          breakpoint: "sm",
+        }}
+      >
+        <AppShell.Navbar>
+          <Navbar />
+        </AppShell.Navbar>
+        <AppShell.Main>
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/hjem" element={<HomePage />} />
+              <Route path="/butik" element={<StorePage/>} />
+              <Route path="/bibliotek" element={<LibraryPage/>} />
+              <Route path="/opload" element={<UploadPage/>} />
+              <Route path="/indstillinger" element={<SettingsPage/>} />
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </Router>
+        </AppShell.Main>
+      </AppShell>
+    </AuthProvider>
   );
 }
 

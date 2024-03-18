@@ -6,7 +6,7 @@ function goToHome() {
     window.location.href = '/';
 }
 
-const ErrorPage: React.FC = () => {
+export function ErrorPage() {
     return (
         <Container className={classes.root}>
           <SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
@@ -24,6 +24,3 @@ const ErrorPage: React.FC = () => {
         </Container>
       );
 };
-
-
-export default ErrorPage;
