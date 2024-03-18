@@ -77,11 +77,22 @@ class AuthRoutes extends Router {
             })
         })
 
+        this.router.get("/logout", (req, res) => {
+            if (!req.user) return res.status(401).json({
+                status: 401,
+                message: "Not logged in"
+            })
+
+            req.session?.destroy(() => {
+                res.redirect("/");
+            })
+        })
+
         this.router.get("/github", (req, res) => {
             // Gem hvor brugeren skal redirectes til efter login
             const redirect = req.query.redirect as string;
             res.cookie("redirect", redirect)
-            passport.authenticate("github") (req, res);
+            passport.authenticate("github")(req, res);
         });
 
         this.router.get("/github/callback", passport.authenticate("github"), (req, res) => {
