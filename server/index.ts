@@ -1,8 +1,15 @@
-import Express, { Application } from 'express'
+import Express, { Application, } from 'express'
 import Cors from './utils/cors'
+import Routes from './router'
+import { IS_PRODUCTION } from './utils/config'
+import session from 'express-session'
+import { PrismaSessionStore } from '@quixo3/prisma-session-store'
+import passport from 'passport'
+import { prisma } from './utils/db'
+import cookieParser from 'cookie-parser'
 
 /**
- * Singelton class to create and manage an express server
+ * Singelton-klasse til at oprette og administrere en express server
  */
 export default class Server {
     private application: Application
@@ -15,9 +22,22 @@ export default class Server {
 
     private plugins() {
         this.application.use(Express.urlencoded({ extended: true }))
+        this.application.use(cookieParser())
         this.application.use(Express.json())
+        this.application.use(session({
+            secret: process.env.SESSION_SECRET!,
+            store: new PrismaSessionStore(prisma as any, {
+                checkPeriod: 2 * 60 * 1000, //ms
+                dbRecordIdIsSessionId: true,
+                dbRecordIdFunction: undefined,
+            }),
+            cookie: {
+                secure: IS_PRODUCTION,
+            },
+        }))
+        this.application.use(passport.session());
         this.application.use(Cors())
-        //   this.application.use(Routes)
+        this.application.use(Routes)
     }
 
     public run() {

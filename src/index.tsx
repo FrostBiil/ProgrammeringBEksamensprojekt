@@ -1,5 +1,18 @@
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./app";
+import { MantineProvider, createTheme } from "@mantine/core";
 
-const root = document.getElementById('root')
+const theme = createTheme({
+  primaryColor: "blue",
+  primaryShade: 7,
+});
 
-ReactDOM.render(<h1>React App is awesome!</h1>, root)
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+root.render(
+  <React.StrictMode>
+    <MantineProvider theme={theme}>
+      <App />
+    </MantineProvider>
+  </React.StrictMode>
+);
