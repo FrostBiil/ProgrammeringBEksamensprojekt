@@ -4,7 +4,7 @@ export function StorePage() {
   
     return (
         <div>
-          <h1>Hello World!</h1>
+          <h1>Butik!</h1>
         </div>
     );
 }

@@ -12,7 +12,7 @@ export class Api {
         return "http://localhost:3000/api" + endpoint;
     }
 
-    public static fetch(endpoint: string, method: string = "GET", body?: any) {
+    private static fetch(endpoint: string, method: string = "GET", body?: any) {
         return window.fetch(this.getEndpoint(endpoint), {
             method: method,
             body: typeof body === "string" ? body : JSON.stringify(body),
@@ -46,5 +46,9 @@ export class Api {
         } else {
             return null;
         }
+    }
+
+    public static publishGame() {
+        // POST 
     }
 }

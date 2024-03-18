@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import { AuthContext } from "../contexts/AuthProvider";
+import { Link } from "react-router-dom";
 import {
   ActionIcon,
   Avatar,
@@ -32,16 +33,18 @@ export function NavbarItem({
 }) {
   return (
     <Tooltip label={label} position="right">
-      <ActionIcon
-        onClick={onClick}
-        color="white"
-        variant="light"
-        size="xl"
-        radius="xl"
-        aria-label={label}
-      >
-        {icon}
-      </ActionIcon>
+      <Link to={path}>
+        <ActionIcon
+          onClick={onClick}
+          color="white"
+          variant="light"
+          size="xl"
+          radius="xl"
+          aria-label={label}
+        >
+          {icon}
+        </ActionIcon>
+      </Link>
     </Tooltip>
   );
 }
@@ -51,10 +54,10 @@ export function Navbar() {
   const theme = useMantineTheme();
   const navbarItems = useMemo(
     () => [
-      { icon: <IconBuildingStore />, label: "Butik" },
-      { icon: <IconBooks />, label: "Bibliotek"},
-      { icon: <IconUpload />, label: "Opload" },
-      { icon: <IconAdjustmentsAlt />, label: "Indstillinger" },
+      { icon: <IconBuildingStore />, label: "Butik", path: "/butik" },
+      { icon: <IconBooks />, label: "Bibliotek", path: "/bibliotek" },
+      { icon: <IconUpload />, label: "Opload", path: "/opload"},
+      { icon: <IconAdjustmentsAlt />, label: "Indstillinger", path: "/indstillinger"},
       { icon: <IconLogout />, label: "Log ud", onClick: () => logout() },
     ],
     [logout, user]
@@ -87,7 +90,11 @@ export function Navbar() {
       <Divider w="50%" />
 
       {navbarItems.slice(0, navbarItems.length - 2).map((item, index) => (
-        <NavbarItem icon={item.icon} label={item.label} path={item.label} />
+        <NavbarItem
+          icon={item.icon}
+          label={item.label}
+          path={item.path ?? "#"}
+        />
       ))}
 
       <Space style={{ flexGrow: 1 }}></Space>
