@@ -1,4 +1,4 @@
-import passport from "passport";
+import passport, { authorize } from "passport";
 import Router from "../Router";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { prisma } from "../../utils/db";
@@ -61,28 +61,17 @@ class AuthRoutes extends Router {
 
     protected routes(): void {
 
-        this.router.get("/me", (req, res) => {
+        this.router.get("/me", AuthRoutes.protect, (req, res) => {
             /**
              * Returner info om brugeren, hvis brugeren er logget ind
              */
-            const user = req.user as User;
-            if (!user) return res.status(401).json({
-                status: 401,
-                message: "Not logged in"
-            })
-
             return res.status(200).json({
                 status: 200,
-                data: user
+                data: req.user
             })
         })
 
         this.router.get("/logout", (req, res) => {
-            if (!req.user) return res.status(401).json({
-                status: 401,
-                message: "Not logged in"
-            })
-
             req.session?.destroy(() => {
                 res.redirect("/");
             })
@@ -101,6 +90,21 @@ class AuthRoutes extends Router {
             res.clearCookie("redirect");
             res.redirect(redirect);
         });
+    }
+
+    public static protect = (req: any, res: any, next: any) => {
+        if (req.user && req.user.id) {
+            return next();
+        }
+
+        res.status(401).json({
+            status: 401,
+            message: "Not logged in"
+        })
+    }
+
+    public protect = (req: any, res: any, next: any) => {
+        AuthRoutes.protect(req, res, next);
     }
 }
 
