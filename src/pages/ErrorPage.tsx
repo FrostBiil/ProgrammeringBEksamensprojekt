@@ -7,7 +7,6 @@ import {
   Button,
   SimpleGrid,
 } from "@mantine/core";
-import classes from "./ErrorPage.module.css";
 
 function goToHome() {
   window.location.href = "/";
@@ -15,10 +14,10 @@ function goToHome() {
 
 export function ErrorPage() {
   return (
-    <Container className={classes.root}>
+    <Container pt="80px" pb="80px">
       <SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
         <div>
-          <Title className={classes.title}>Something is not right...</Title>
+          <Title fw="900" fs="34px" mb="md" ff="arial">Something is not right...</Title>
           <Text c="dimmed" size="lg">
             Page you are trying to open does not exist. You may have mistyped
             the address, or the page has been moved to another URL. If you think
@@ -29,7 +28,6 @@ export function ErrorPage() {
             variant="outline"
             size="md"
             mt="xl"
-            className={classes.control}
           >
             Get back to home page
           </Button>
