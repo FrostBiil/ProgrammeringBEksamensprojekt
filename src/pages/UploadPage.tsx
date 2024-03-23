@@ -71,8 +71,8 @@ export function UploadPage() {
   const formItemsText = [
     {
       withAsterisk: true,
-      label: "Title",
-      placeholder: "My awesome game",
+      label: "Titel",
+      placeholder: "Mit fede spil",
       id: "title",
       ...form.getInputProps("title"),
     },
@@ -85,8 +85,8 @@ export function UploadPage() {
     },
     {
       withAsterisk: true,
-      label: "Short description",
-      placeholder: "This game is awesome because...",
+      label: "Kort beskrivelse",
+      placeholder: "Dette spil er fedt, fordi...",
       id: "description",
       ...form.getInputProps("description"),
     },
@@ -113,8 +113,8 @@ export function UploadPage() {
             <MultiSelect
               pt="md"
               withAsterisk
-              label="Your game's genre(s)"
-              placeholder="Select at least 1 genre"
+              label="Dit spil's genre"
+              placeholder="Vælg mindst 1 genre"
               data={Genres}
               onChange={(v) => form.setFieldValue("genres", v)}
               error={form.errors.genres}
@@ -122,41 +122,41 @@ export function UploadPage() {
 
             <TagsInput
               label="Tags"
-              placeholder="Enter tag(s)"
+              placeholder="Skriv tag(s)"
               pt="md"
               onChange={(v) => form.setFieldValue("tags", v)}
             />
 
             <Radio.Group
               name="access"
-              label="Visibility and access"
+              label="Visibilitet"
               withAsterisk
               pt="md"
               {...form.getInputProps("access")}
             >
               <Group mt="xs">
-                <Radio value="private" label="Private" />
-                <Radio value="public" label="Public" />
+                <Radio value="private" label="Privat" />
+                <Radio value="public" label="Offenlig" />
               </Group>
             </Radio.Group>
 
-            <Checkbox.Group pt="md" withAsterisk label="Terms and conditions">
+            <Checkbox.Group pt="md" withAsterisk label="Vilkår og betingelser">
               <Checkbox
                 pt="md"
                 required
                 value="agree"
-                label="I agree to sell my soul to the devil for this game to be published."
+                label="Jeg accepterer at sælge min sjæl til djævelen for at dette spil kan udgives."
                 {...form.getInputProps("termsOfService", { type: "checkbox" })}
               />
             </Checkbox.Group>
 
             <Group justify="flex-end" mt="md">
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Udgiv</Button>
             </Group>
           </Grid.Col>
           <Grid.Col span={5}>
-            <h5>Cover Image</h5>
-            <p>Upload an image that represents your game.</p>
+            <h5>Frontbillede</h5>
+            <p>Opload et billede der repræsentere dit spil</p>
             <Dropzone
               onDrop={(files) => setCoverImage(files)}
               accept={IMAGE_MIME_TYPE}
@@ -171,13 +171,13 @@ export function UploadPage() {
             >
               <Group justify="center">
                 <Button>
-                  Choose cover image
+                  Vælg frontbillede
                 </Button>
               </Group>
             </Dropzone>
 
-            <h5 style={{ marginTop: 20 }}>Screenshots</h5>
-            <p>Upload screenshots from gameplay. Recommended 3-5.</p>
+            <h5 style={{ marginTop: 20 }}>Skærmbilleder</h5>
+            <p>Opload skærmbilleder fra spillet. Anbefalet 3-5.</p>
             <Dropzone
               onDrop={(files) =>
                 setScreenshots((prevScreenshots) => [
@@ -197,7 +197,7 @@ export function UploadPage() {
               }}
             >
               <Button>
-                Choose screenshots
+                Vælg skærmbilleder
               </Button>
             </Dropzone>
           </Grid.Col>
