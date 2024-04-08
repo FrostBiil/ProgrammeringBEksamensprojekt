@@ -14,30 +14,30 @@ import { UploadPage } from "./pages/UploadPage";
 function App() {
   return (
     <AuthProvider>
-      <AppShell
-        padding={"md"}
-        navbar={{
-          width: 100,
-          breakpoint: "sm",
-        }}
-      >
-        <AppShell.Navbar>
-          <Navbar />
-        </AppShell.Navbar>
-        <AppShell.Main>
-          <Router>
+      <Router>
+        <AppShell
+          padding={"md"}
+          navbar={{
+            width: 100,
+            breakpoint: "sm",
+          }}
+        >
+          <AppShell.Navbar>
+            <Navbar />
+          </AppShell.Navbar>
+          <AppShell.Main>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/hjem" element={<HomePage />} />
-              <Route path="/butik" element={<StorePage/>} />
-              <Route path="/bibliotek" element={<LibraryPage/>} />
-              <Route path="/opload" element={<UploadPage/>} />
-              <Route path="/indstillinger" element={<SettingsPage/>} />
+              <Route path="/butik" element={<StorePage />} />
+              <Route path="/bibliotek" element={<LibraryPage />} />
+              <Route path="/opload" element={<UploadPage />} />
+              <Route path="/indstillinger" element={<SettingsPage />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
-          </Router>
-        </AppShell.Main>
-      </AppShell>
+          </AppShell.Main>
+        </AppShell>
+      </Router>
     </AuthProvider>
   );
 }
