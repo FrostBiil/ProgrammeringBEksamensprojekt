@@ -16,6 +16,9 @@ export class Api {
     return window.fetch(this.getEndpoint(endpoint), {
       method: method,
       body: typeof body === "string" ? body : JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
 
       // Nødvendigt for at kunne sende cookies med i fetch requesten, men kun i development da de kører på samme server i production
       credentials: IS_PRODUCTION ? "same-origin" : "include",
