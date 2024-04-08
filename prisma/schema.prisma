@@ -71,6 +71,8 @@ model GameOwner {
   gameId String
   userId String
 
+  date DateTime @default(now())
+
   @@unique([gameId, userId])
 }
 

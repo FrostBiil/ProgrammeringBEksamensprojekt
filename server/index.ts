@@ -23,7 +23,9 @@ export default class Server {
     private plugins() {
         this.application.use(Express.urlencoded({ extended: true }))
         this.application.use(cookieParser())
-        this.application.use(Express.json())
+        this.application.use(Express.json({
+            limit: '50mb'
+        }))
         this.application.use(session({
             secret: process.env.SESSION_SECRET!,
             store: new PrismaSessionStore(prisma as any, {
@@ -36,7 +38,10 @@ export default class Server {
             },
         }))
         this.application.use(passport.session());
-        this.application.use(Cors())
+        this.application.use(Cors({
+            origin: IS_PRODUCTION ? 'https://localhost:3000' : 'http://localhost:5000',
+            credentials: true,
+        }))
         this.application.use(Routes)
     }
 
