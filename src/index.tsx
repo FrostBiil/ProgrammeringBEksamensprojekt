@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./app";
 import { MantineProvider, createTheme } from "@mantine/core";
-import '@mantine/carousel/styles.css';
 
 const theme = createTheme({
   primaryColor: "blue",

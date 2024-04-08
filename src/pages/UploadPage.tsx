@@ -13,14 +13,16 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { ImageConverter } from "../utils/imageConverter";
+import { Api } from "../utils/api";
 
 interface FormValues {
-  githubURL: string;
+  projectUrl: string;
   title: string;
   description: string;
   tags: string[];
   genres: string[];
-  access: string;
+  visibility: string;
   termsOfService: boolean[];
 }
 
@@ -38,33 +40,39 @@ const Genres = [
 ];
 
 export function UploadPage() {
-  const [coverImage, setCoverImage] = useState<FileWithPath[]>([]);
-  const [screenshots, setScreenshots] = useState<FileWithPath[]>([]);
+  const [cover, setCoverImage] = useState<string | undefined>(
+    undefined
+  );
+  const [screenshots, setScreenshots] = useState<string[]>([]);
 
   const theme = useMantineTheme();
 
   const form = useForm<FormValues>({
     initialValues: {
-      githubURL: "",
+      projectUrl: "",
       title: "",
       description: "",
       tags: [],
       genres: [],
-      access: "",
+      visibility: "",
       termsOfService: [],
     },
 
     validate: {
-      githubURL: (value) =>
+      projectUrl: (value) =>
         /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(
           value
         )
           ? null
-          : "Invalid URL",
-      title: (value) => (value.trim() ? null : "Title is required"),
-      description: (value) => (value.trim() ? null : "Description is required"),
+          : "Ugyldig URL",
+      title: (value) => (value.trim() ? null : "Titel er påkrævet"),
+      description: (value) => (value.trim() ? null : "Beskrivelse er påkrævet"),
       genres: (value) =>
-        value.length > 0 ? null : "At least 1 genre is required",
+        value.length > 0 ? null : "Mindst 1 genre er påkrævet",
+      visibility: (value) =>
+        ["Private", "Public"].includes(value)
+          ? null
+          : "Vælg venligst visibilitet",
     },
   });
 
@@ -78,10 +86,10 @@ export function UploadPage() {
     },
     {
       withAsterisk: true,
-      label: "Github URL",
+      label: "Project URL",
       placeholder: "https://github.com/username/repo",
-      id: "githubURL",
-      ...form.getInputProps("githubURL"),
+      id: "projectUrl",
+      ...form.getInputProps("projectUrl"),
     },
     {
       withAsterisk: true,
@@ -96,8 +104,18 @@ export function UploadPage() {
     <Paper shadow="xs" p="xl">
       <h2>Upload a new project</h2>
       <form
-        onSubmit={form.onSubmit((values) =>
-          console.log({ ...values, coverImage, screenshots })
+        onSubmit={form.onSubmit((values) => {
+          if (!cover) {
+            alert("Vælg venligst et frontbillede");
+            return;
+          }
+          if (screenshots.length === 0) {
+            alert("Vælg venligst mindst et skærmbillede");
+            return;
+          }
+
+          Api.publishGame({ ...values, cover, screenshots })
+        }
         )}
       >
         <Grid>
@@ -128,15 +146,15 @@ export function UploadPage() {
             />
 
             <Radio.Group
-              name="access"
+              name="visibility"
               label="Visibilitet"
               withAsterisk
               pt="md"
-              {...form.getInputProps("access")}
+              {...form.getInputProps("visibility")}
             >
               <Group mt="xs">
-                <Radio value="private" label="Privat" />
-                <Radio value="public" label="Offenlig" />
+                <Radio value="Private" label="Privat" />
+                <Radio value="Public" label="Offenlig" />
               </Group>
             </Radio.Group>
 
@@ -158,7 +176,7 @@ export function UploadPage() {
             <h5>Frontbillede</h5>
             <p>Opload et billede der repræsentere dit spil</p>
             <Dropzone
-              onDrop={(files) => setCoverImage(files)}
+              onDrop={(files) => ImageConverter.convertImageToBase64(files[0]).then(encoded => setCoverImage(encoded))}
               accept={IMAGE_MIME_TYPE}
               style={{
                 height: 150,
@@ -170,21 +188,25 @@ export function UploadPage() {
               }}
             >
               <Group justify="center">
-                <Button>
-                  Vælg frontbillede
-                </Button>
+                {cover && (
+                  <img
+                    src={cover}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      objectFit: "cover",
+                      borderRadius: theme.radius.sm,
+                    }}
+                  />
+                )}
+                <Button>Vælg frontbillede</Button>
               </Group>
             </Dropzone>
 
             <h5 style={{ marginTop: 20 }}>Skærmbilleder</h5>
             <p>Opload skærmbilleder fra spillet. Anbefalet 3-5.</p>
             <Dropzone
-              onDrop={(files) =>
-                setScreenshots((prevScreenshots) => [
-                  ...prevScreenshots,
-                  ...files,
-                ])
-              }
+              onDrop={(files) => Promise.all(files.map(file => ImageConverter.convertImageToBase64(file))).then(setScreenshots)}
               accept={IMAGE_MIME_TYPE}
               multiple
               style={{
@@ -196,9 +218,7 @@ export function UploadPage() {
                 justifyContent: "center",
               }}
             >
-              <Button>
-                Vælg skærmbilleder
-              </Button>
+              <Button>Vælg skærmbilleder</Button>
             </Dropzone>
           </Grid.Col>
         </Grid>

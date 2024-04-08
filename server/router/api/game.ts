@@ -81,6 +81,8 @@ class GameRoute extends Router {
                 screenshots
             } = req.body
 
+            console.log(req.body)
+
             // Validate inputs
             if (typeof projectUrl !== "string") {
                 // TODO: Validate project URL
