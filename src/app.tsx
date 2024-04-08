@@ -19,7 +19,6 @@ function App() {
     <AuthProvider>
       <Router>
         <AppShell
-          padding={"md"}
           navbar={{
             width: 100,
             breakpoint: "sm",

@@ -91,6 +91,7 @@ export function Navbar() {
 
       {navbarItems.slice(0, navbarItems.length - 2).map((item, index) => (
         <NavbarItem
+          key={index}
           icon={item.icon}
           label={item.label}
           path={item.path ?? "#"}
@@ -105,6 +106,7 @@ export function Navbar() {
         .slice(navbarItems.length - 2, navbarItems.length)
         .map((item, index) => (
           <NavbarItem
+            key={index}
             icon={item.icon}
             label={item.label}
             path={item.label}

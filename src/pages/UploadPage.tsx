@@ -40,9 +40,7 @@ const Genres = [
 ];
 
 export function UploadPage() {
-  const [cover, setCoverImage] = useState<string | undefined>(
-    undefined
-  );
+  const [cover, setCoverImage] = useState<string | undefined>(undefined);
   const [screenshots, setScreenshots] = useState<string[]>([]);
 
   const theme = useMantineTheme();
@@ -102,7 +100,7 @@ export function UploadPage() {
 
   return (
     <Paper shadow="xs" p="xl">
-      <h2>Upload a new project</h2>
+      <h2>Upload et nyt projekt</h2>
       <form
         onSubmit={form.onSubmit((values) => {
           if (!cover) {
@@ -114,9 +112,8 @@ export function UploadPage() {
             return;
           }
 
-          Api.publishGame({ ...values, cover, screenshots })
-        }
-        )}
+          Api.publishGame({ ...values, cover, screenshots });
+        })}
       >
         <Grid>
           <Grid.Col span={7}>
@@ -176,7 +173,11 @@ export function UploadPage() {
             <h5>Frontbillede</h5>
             <p>Opload et billede der repræsentere dit spil</p>
             <Dropzone
-              onDrop={(files) => ImageConverter.convertImageToBase64(files[0]).then(encoded => setCoverImage(encoded))}
+              onDrop={(files) =>
+                ImageConverter.convertImageToBase64(files[0]).then((encoded) =>
+                  setCoverImage(encoded)
+                )
+              }
               accept={IMAGE_MIME_TYPE}
               style={{
                 height: 150,
@@ -187,26 +188,29 @@ export function UploadPage() {
                 justifyContent: "center",
               }}
             >
-              <Group justify="center">
-                {cover && (
-                  <img
-                    src={cover}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      objectFit: "cover",
-                      borderRadius: theme.radius.sm,
-                    }}
-                  />
-                )}
+              {cover ? (
+                <img
+                  src={cover}
+                  style={{
+                    width: 150,
+                    height: 150,
+                    objectFit: "cover",
+                    borderRadius: theme.radius.sm,
+                  }}
+                />
+              ) : (
                 <Button>Vælg frontbillede</Button>
-              </Group>
+              )}
             </Dropzone>
 
             <h5 style={{ marginTop: 20 }}>Skærmbilleder</h5>
             <p>Opload skærmbilleder fra spillet. Anbefalet 3-5.</p>
             <Dropzone
-              onDrop={(files) => Promise.all(files.map(file => ImageConverter.convertImageToBase64(file))).then(setScreenshots)}
+              onDrop={(files) =>
+                Promise.all(
+                  files.map((file) => ImageConverter.convertImageToBase64(file))
+                ).then(setScreenshots)
+              }
               accept={IMAGE_MIME_TYPE}
               multiple
               style={{
@@ -218,7 +222,24 @@ export function UploadPage() {
                 justifyContent: "center",
               }}
             >
-              <Button>Vælg skærmbilleder</Button>
+              {screenshots.length != undefined ? (
+                <Group>
+                  {" "}
+                  {screenshots.map((screenshot) => (
+                    <img
+                      src={screenshot}
+                      style={{
+                        width: 50,
+                        height: 50,
+                        objectFit: "cover",
+                        borderRadius: theme.radius.sm,
+                      }}
+                    />
+                  ))}
+                </Group>
+              ) : (
+                <Button>Vælg skærmbilleder</Button>
+              )}
             </Dropzone>
           </Grid.Col>
         </Grid>

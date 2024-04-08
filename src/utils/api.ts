@@ -1,5 +1,5 @@
+import { Game } from "@prisma/client";
 import { API_BASEURL, IS_PRODUCTION } from "./config";
-import { ImageConverter } from "./imageConverter"
 
 export class Api {
   private static getEndpoint(endpoint: string) {
@@ -61,5 +61,21 @@ export class Api {
     screenshots: string[];
   }) {
     this.fetch("/games", "POST", gameData);
+  }
+
+  public static async getGames(): Promise<Game[]> {
+    return new Promise((resolve, reject) => {
+      this.fetch("/games")
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            reject(res.statusText);
+          }
+        })
+        .then((data) => {
+          resolve(data);
+        });
+    });
   }
 }
