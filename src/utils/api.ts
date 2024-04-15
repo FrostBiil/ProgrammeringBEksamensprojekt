@@ -114,17 +114,10 @@ export class Api {
   }
 
   // Hent alle spil fra en bruger
-<<<<<<< Updated upstream
-  public static async getUserGames(): Promise<{ game: Game }[]> {
-    const res = await this.fetch(`/users/games`);
-    if (res.status === 200) {
-      return await res.json();
-=======
   public static async getUserGames(): Promise<{game: Game}[]> {
     const res = await this.fetch(`/users/games`);
     if (res.status === 200) {
-      return (await res.json());
->>>>>>> Stashed changes
+      return await res.json();
     } else {
       return [];
     }

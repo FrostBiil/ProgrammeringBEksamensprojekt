@@ -1,32 +1,21 @@
 import {
   Image,
-  Paper,
-  Text,
   Title,
   Button,
-  useMantineTheme,
-  Container,
   Divider,
-  ActionIcon,
-  rem,
-  Box,
-  Flex,
-  Chip,
-  Pill,
   Grid,
-  SimpleGrid,
   Group,
 } from "@mantine/core";
 import { Game } from "@prisma/client";
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../contexts/AuthProvider";
 import { Api } from "../utils/api";
-import { IconHeart } from "@tabler/icons-react";
+import { AuthContext } from "../contexts/AuthProvider";
+
 
 export function LibraryPage() {
   const [games, setGames] = useState<Game[]>([]);
-  const theme = useMantineTheme();
-  const { user } = useContext(AuthContext);
+  const { user, loaded } = useContext(AuthContext);
+
 
   useEffect(() => {
     Api.getUserGames().then((ownerships) => {
@@ -34,6 +23,13 @@ export function LibraryPage() {
       setGames(ownerships.map((ownership) => ownership.game));
     });
   }, []);
+
+  useEffect(() => {
+    console.log(user)
+    if (!user && loaded) {
+      Api.login();
+    }
+  }, [user, loaded]);
 
   const downloadGameButton = (item: Game) => {
     return (
@@ -45,8 +41,8 @@ export function LibraryPage() {
     );
   };
 
-  const userGamesGrid = games.map((item) => (
-    <Grid.Col key={item.id} span={2} p="lg">
+  const userGamesGrid = (span: number) => games.map((item) => (
+    <Grid.Col key={item.id} span={span} p="lg">
       <Image
         style={{ aspectRatio: 16 / 9 }}
         radius="md"
@@ -56,27 +52,6 @@ export function LibraryPage() {
       <Title order={3} pt="md">
         {item.title}
       </Title>
-      <Text c="gray" pb="md">
-        {(item.genres ?? []).join(", ")}
-      </Text>
-      <Text fz="sm" mt="xs">
-        {item.description}
-      </Text>
-      {item.tags && item.tags.length > 0 ? (
-        <>
-          <Divider mt="md" labelPosition="left" label="Tags" />
-          <Flex wrap={"wrap"} gap="md" pt={"md"}>
-            {item.tags.map((tag) => (
-              <Pill key={tag} color="blue" style={{ marginRight: 5 }}>
-                {tag}
-              </Pill>
-            ))}
-          </Flex>
-          <Divider mt="xs" />
-        </>
-      ) : (
-        <></>
-      )}
       {downloadGameButton(item)}
     </Grid.Col>
   ));
@@ -84,9 +59,11 @@ export function LibraryPage() {
   return (
     <>
       <Divider mx="md" labelPosition="left" label={"Senest spil"} />
+      <Grid p="md">{userGamesGrid(4)}</Grid>
+
 
       <Divider mx="md" labelPosition="left" label={"Spil " + games.length} />
-      <Grid p="md">{userGamesGrid}</Grid>
+      <Grid p="md">{userGamesGrid(3)}</Grid>
     </>
   );
 }

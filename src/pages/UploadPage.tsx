@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -13,7 +13,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { ImageConverter } from "../utils/imageConverter";
 import { Api } from "../utils/api";
 import { AuthContext } from "../contexts/AuthProvider";
@@ -61,7 +61,7 @@ export function UploadPage() {
 
     validate: {
       projectUrl: (value) =>
-        /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(
+        /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_~#?&//=]*)$/.test(
           value
         )
           ? null
@@ -196,7 +196,7 @@ export function UploadPage() {
                 }}
               >
                 {cover ? (
-                  <img
+                  <img alt="Frontbillede"
                     src={cover}
                     style={{
                       width: 150,
@@ -229,11 +229,11 @@ export function UploadPage() {
                   justifyContent: "center",
                 }}
               >
-                {screenshots.length != undefined ? (
+                {screenshots.length !== undefined ? (
                   <Group>
                     {" "}
                     {screenshots.map((screenshot) => (
-                      <img
+                      <img alt="Skærmbilleder"
                         src={screenshot}
                         style={{
                           width: 50,
