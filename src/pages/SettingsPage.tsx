@@ -10,8 +10,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <h1>Indstillinger!</h1>
-      <Container>
+      <Container mt={"xl"}>
         <Paper withBorder shadow={"md"} p={'md'}>
           <h3>Indstilinger</h3>
 

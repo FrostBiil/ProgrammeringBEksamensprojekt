@@ -21,7 +21,7 @@ function App() {
         <AppShell
           navbar={{
             width: 100,
-            breakpoint: "sm",
+            breakpoint: 0
           }}
         >
           <AppShell.Navbar>
