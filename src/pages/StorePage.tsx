@@ -43,6 +43,18 @@ export function StorePage() {
     });
   }, []);
 
+  const addGameButton = (item: Game) => {
+    return user ? (
+      <Group mt="xs">
+        <Button size="sm" onClick={() => Api.addGameToUser(item.id)}>
+          Tilføj spil
+        </Button>
+      </Group>
+    ) : (
+      <></>
+    );
+  };
+
   const featuredGames = games.slice(0, 5).map((item) => (
     <Carousel.Slide key={item.id}>
       <Paper shadow="md" withBorder radius="lg" p="lg">
@@ -63,13 +75,7 @@ export function StorePage() {
         <Text color="gray" pb="md">
           {item.genres.join(", ")}
         </Text>
-        <Group mt="xs">
-          <Button size="sm">Tilføj spil</Button>
-
-          <ActionIcon variant="default" radius="md" size={36}>
-            <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
-          </ActionIcon>
-        </Group>
+        {addGameButton(item)}
       </Paper>
     </Carousel.Slide>
   ));
@@ -104,6 +110,7 @@ export function StorePage() {
           <Divider mt="xs" />
         </>
       ) : null}
+<<<<<<< Updated upstream
 
       <Group mt="xs">
         {user && (
@@ -117,6 +124,9 @@ export function StorePage() {
           </>
         )}
       </Group>
+=======
+      {addGameButton(item)}
+>>>>>>> Stashed changes
     </Paper>
   ));
 
