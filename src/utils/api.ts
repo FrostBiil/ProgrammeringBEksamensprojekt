@@ -106,7 +106,7 @@ export class Api {
 
   // Fjern et spil fra en bruger
   public static async removeGameFromUser(gameId: string) {
-    return await this.fetch(`/users//games/${gameId}`, "DELETE");
+    return await this.fetch(`/users/games/${gameId}`, "DELETE");
   }
 
   // Hent alle spil fra en bruger
