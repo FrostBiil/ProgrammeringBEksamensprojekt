@@ -136,7 +136,9 @@ export function UploadPage() {
               <Autocomplete pt="md"
                 data={projects}
                 label="GitHub URL"
+                withAsterisk
                 placeholder="https://github.com/user/repo"
+                {...form.getInputProps("projectUrl")}
               />
 
               {formItemsText.map((props) => (
