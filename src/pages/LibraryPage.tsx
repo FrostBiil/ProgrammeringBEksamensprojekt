@@ -1,27 +1,16 @@
 import {
   Image,
-  Paper,
-  Text,
   Title,
   Button,
-  useMantineTheme,
-  Container,
   Divider,
-  ActionIcon,
-  rem,
-  Box,
-  Flex,
-  Chip,
-  Pill,
   Grid,
-  SimpleGrid,
   Group,
 } from "@mantine/core";
 import { Game, GameOwner } from "@prisma/client";
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../contexts/AuthProvider";
 import { Api } from "../utils/api";
-import { IconHeart } from "@tabler/icons-react";
+import { AuthContext } from "../contexts/AuthProvider";
+
 
 export function LibraryPage() {
   const [ownerships, setOwnerships] = useState<GameOwner[]>([]);
@@ -34,6 +23,13 @@ export function LibraryPage() {
       setOwnerships(ownerships.map((ownership) => ownership));
     });
   }, []);
+
+  useEffect(() => {
+    console.log(user)
+    if (!user && loaded) {
+      Api.login();
+    }
+  }, [user, loaded]);
 
   const downloadGameButton = (item: Game) => {
     return (

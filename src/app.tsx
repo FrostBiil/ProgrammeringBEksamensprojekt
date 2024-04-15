@@ -14,7 +14,7 @@ import { StorePage } from "./pages/StorePage";
 import { LibraryPage } from "./pages/LibraryPage";
 import { UploadPage } from "./pages/UploadPage";
 
-function App() {
+export default function App() {
   return (
     <AuthProvider>
       <Router>
@@ -43,5 +43,3 @@ function App() {
     </AuthProvider>
   );
 }
-
-export default App;
