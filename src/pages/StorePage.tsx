@@ -18,6 +18,8 @@ import {
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
 import { AuthContext } from "../contexts/AuthProvider";
+import { useHover } from "@mantine/hooks";
+import { GameCardLarge } from "../components/GameCardLarge";
 
 export function StorePage() {
   const [games, setGames] = useState<Game[]>([]);
@@ -43,26 +45,11 @@ export function StorePage() {
     );
   };
 
-  const featuredGames = games.slice(0, 5).map((item) => (
-    <Carousel.Slide key={item.id}>
-      <Paper shadow="md" withBorder radius="lg" style={{ overflow: "clip", position: "relative" }}>
-        <Image
-          style={{ aspectRatio: 16 / 9 }}
-          src={item.cover}
-          alt={item.title}
-        />
-        <Box pos={"absolute"} style={{
-          width: "100%",
-          bottom: 0,
-          backgroundImage: "linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0))",
-        }}>
-          <Title order={3} pt="md">
-            {item.title}
-          </Title>
-        </Box>
-      </Paper>
+  const featuredGames = games.slice(0, 5).map((item) => {
+    return <Carousel.Slide key={item.id}>
+      <GameCardLarge game={item} />
     </Carousel.Slide>
-  ));
+  });
 
   const gridElements = games.map((item) => (
     <Paper key={item.id} shadow="md" withBorder radius="lg" p="lg">
@@ -116,6 +103,7 @@ export function StorePage() {
           align="start"
           loop
           slidesToScroll={3}
+          style={{overflow: "visible"}}
         >
           {featuredGames}
         </Carousel>

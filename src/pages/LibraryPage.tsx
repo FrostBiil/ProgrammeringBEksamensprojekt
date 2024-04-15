@@ -38,7 +38,7 @@ export function LibraryPage() {
   const downloadGameButton = (item: Game) => {
     return (
       <Group mt="xs">
-        <Button size="sm" onClick={() => window.open(item.projectUrl)}>
+        <Button size="sm" onClick={() => window.open(item.projectUrl + "/releases/latest")}>
           Download spil
         </Button>
       </Group>
