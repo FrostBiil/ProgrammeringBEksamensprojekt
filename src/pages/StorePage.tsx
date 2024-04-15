@@ -59,7 +59,7 @@ export function StorePage() {
         >
           {item.title}
         </Title>
-        <Text color="gray" pb="md">
+        <Text c="gray" pb="md">
           {item.genres.join(", ")}
         </Text>
         {addGameButton(item)}
