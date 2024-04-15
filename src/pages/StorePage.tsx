@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { IconHeart } from "@tabler/icons-react";
 import { Carousel } from "@mantine/carousel";
-import { useMediaQuery } from "@mantine/hooks";
 import {
   Image,
   Paper,
@@ -9,27 +7,16 @@ import {
   Title,
   Button,
   useMantineTheme,
-  Container,
   Divider,
-  ActionIcon,
-  rem,
   Box,
   Flex,
-  Chip,
   Pill,
-  Grid,
   SimpleGrid,
   Group,
 } from "@mantine/core";
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
 import { AuthContext } from "../contexts/AuthProvider";
-
-interface CardProps {
-  image: string;
-  title: string;
-  genre: string;
-}
 
 export function StorePage() {
   const [games, setGames] = useState<Game[]>([]);
@@ -115,9 +102,6 @@ export function StorePage() {
         {user && (
           <>
             {addGameButton(item)}
-            <ActionIcon variant="default" radius="md" size={36}>
-              <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
-            </ActionIcon>
           </>
         )}
       </Group>

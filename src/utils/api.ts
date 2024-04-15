@@ -40,7 +40,7 @@ export class Api {
 
   public static logout() {
     // /api/auth/logout
-    Api.fetch("/auth/logout")
+    Api.fetch("/auth/logout");
   }
 
   public static async me(): Promise<User | null> {
@@ -114,19 +114,12 @@ export class Api {
   }
 
   // Hent alle spil fra en bruger
-  public static async getUserGames(): Promise<Game[]> {
+  public static async getUserGames(): Promise<{ game: Game }[]> {
     const res = await this.fetch(`/users/games`);
     if (res.status === 200) {
-      return (await res.json()).data as Game[];
+      return await res.json();
     } else {
       return [];
     }
   }
-
-  
-
-
-
-
-
 }
