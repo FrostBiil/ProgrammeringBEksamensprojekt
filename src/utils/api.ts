@@ -53,6 +53,7 @@ export class Api {
     }
   }
 
+  // Opret et nyt spil til serveren
   public static publishGame(gameData: {
     projectUrl: string;
     title: string;
@@ -66,6 +67,12 @@ export class Api {
     this.fetch("/games", "POST", gameData);
   }
 
+  // Slet et spil fra serveren
+  public static deleteGame(id: string) {
+    this.fetch(`/games/${id}`, "DELETE");
+  }
+
+  // Hent alle spil fra serveren
   public static async getGames(): Promise<Game[]> {
     return new Promise((resolve, reject) => {
       this.fetch("/games")
@@ -81,4 +88,41 @@ export class Api {
         });
     });
   }
+
+  // Hent et spil fra serveren
+  public static async getGame(id: string): Promise<Game | null> {
+    const res = await this.fetch(`/games/${id}`);
+    if (res.status === 200) {
+      return (await res.json()).data as Game;
+    } else {
+      return null;
+    }
+  }
+
+  // Tilføj et spil til en bruger
+  public static async addGameToUser(userId: string, gameId: string) {
+    await this.fetch(`/users/${userId}/games/${gameId}`, "POST");
+  }
+
+  // Fjern et spil fra en bruger
+  public static async removeGameFromUser(userId: string, gameId: string) {
+    await this.fetch(`/users/${userId}/games/${gameId}`, "DELETE");
+  }
+
+  // Hent alle spil fra en bruger
+  public static async getUserGames(userId: string): Promise<Game[]> {
+    const res = await this.fetch(`/users/${userId}/games`);
+    if (res.status === 200) {
+      return (await res.json()).data as Game[];
+    } else {
+      return [];
+    }
+  }
+
+  
+
+
+
+
+
 }

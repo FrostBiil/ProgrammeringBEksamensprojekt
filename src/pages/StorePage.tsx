@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { IconHeart } from "@tabler/icons-react";
 import { Carousel } from "@mantine/carousel";
 import { useMediaQuery } from "@mantine/hooks";
 import {
@@ -9,6 +10,8 @@ import {
   Button,
   useMantineTheme,
   Container,
+  Divider,
+  ActionIcon,
   rem,
   Box,
   Flex,
@@ -16,9 +19,12 @@ import {
   Pill,
   Grid,
   SimpleGrid,
+  Group,
 } from "@mantine/core";
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
+import { AuthContext } from "../contexts/AuthProvider";
+
 
 interface CardProps {
   image: string;
@@ -26,11 +32,11 @@ interface CardProps {
   genre: string;
 }
 
-
 export function StorePage() {
   const [games, setGames] = useState<Game[]>([]);
   const theme = useMantineTheme();
-
+  const { user} = useContext(AuthContext);
+  
   useEffect(() => {
     Api.getGames().then((games) => {
       console.log(games);
@@ -58,44 +64,64 @@ export function StorePage() {
         <Text color="gray" pb="md">
           {item.genres.join(", ")}
         </Text>
-        <Button size="sm">Buy now</Button>
+        <Group mt="xs">
+          <Button size="sm">Tilføj spil</Button>
+
+          <ActionIcon variant="default" radius="md" size={36}>
+            <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
+          </ActionIcon>
+        </Group>
       </Paper>
     </Carousel.Slide>
   ));
 
   const gridElements = games.map((item) => (
-    <Paper
-    key={item.id}
-      shadow="md"
-      withBorder
-      radius="lg"
-      p="lg"
-    >
+    <Paper key={item.id} shadow="md" withBorder radius="lg" p="lg">
       <Image
         style={{ aspectRatio: 16 / 9 }}
         radius="md"
         src={item.cover}
         alt={item.title}
       />
-      <Title order={3} py="md">
+      <Title order={3} pt="md">
         {item.title}
       </Title>
       <Text color="gray" pb="md">
         {item.genres.join(", ")}
       </Text>
-      <Flex wrap={"wrap"} gap="md">
-        {["Adventure", "RPG", "Action", "Indie", "Singleplayer"].map((tag) => (
-          <Pill key={tag} color="blue" style={{ marginRight: 5 }}>
-            {tag}
-          </Pill>
-        ))}
-      </Flex>
+      <Text fz="sm" mt="xs">
+        {item.description}
+      </Text>
+      {item.tags.length > 0 ? (
+        <>
+          <Divider mt="md" labelPosition="left" label="Tags" />
+          <Flex wrap={"wrap"} gap="md" pt={"md"}>
+            {item.tags.map((tag) => (
+              <Pill key={tag} color="blue" style={{ marginRight: 5 }}>
+                {tag}
+              </Pill>
+            ))}
+          </Flex>
+          <Divider mt="xs" />
+        </>
+      ) : null}
+
+      <Group mt="xs">
+        {
+          user && (<Button size="sm" onClick={() => Api.addGameToUser(user!.id, item.id)}>Tilføj spil</Button>)
+        }
+        
+
+        <ActionIcon variant="default" radius="md" size={36}>
+          <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
+        </ActionIcon>
+      </Group>
     </Paper>
   ));
 
   return (
     <>
-      <Box w="100%" bg="lightblue" py="lg">
+      <Box w="100%" bg={theme.colors[theme.primaryColor][1]} py="lg">
         <Carousel
           withIndicators
           slideSize={"32%"}
@@ -108,9 +134,14 @@ export function StorePage() {
           {featuredGames}
         </Carousel>
       </Box>
-      <SimpleGrid p="md" cols={5}>
-        {gridElements}
-      </SimpleGrid>
+      <Flex>
+        <Box bg={theme.colors[theme.primaryColor][0]} w={500}></Box>
+        <Box>
+          <SimpleGrid p="md" cols={5}>
+            {gridElements}
+          </SimpleGrid>
+        </Box>
+      </Flex>
     </>
   );
 }
