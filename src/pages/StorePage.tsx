@@ -110,23 +110,17 @@ export function StorePage() {
           <Divider mt="xs" />
         </>
       ) : null}
-<<<<<<< Updated upstream
 
       <Group mt="xs">
         {user && (
           <>
-            <Button size="sm" onClick={async () => console.log(await Api.addGameToUser(item.id))}>
-              Tilføj spil
-            </Button>{" "}
+            {addGameButton(item)}
             <ActionIcon variant="default" radius="md" size={36}>
               <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
             </ActionIcon>
           </>
         )}
       </Group>
-=======
-      {addGameButton(item)}
->>>>>>> Stashed changes
     </Paper>
   ));
 
