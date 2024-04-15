@@ -65,8 +65,8 @@ model User {
 
 model GameOwner {
   id   String @id @default(cuid())
-  game Game   @relation(fields: [gameId], references: [id])
-  user User   @relation(fields: [userId], references: [id])
+  game Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   gameId String
   userId String
@@ -83,7 +83,7 @@ model Game {
   lastUpdated DateTime @updatedAt
 
   publisherId String
-  publisher   User        @relation(fields: [publisherId], references: [id])
+  publisher   User        @relation(fields: [publisherId], references: [id], onDelete: Cascade)
   owners      GameOwner[]
 
   projectUrl  String

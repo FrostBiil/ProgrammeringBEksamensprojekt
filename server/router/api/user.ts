@@ -8,6 +8,22 @@ class UserRouter extends Router {
 
     public routes() {
 
+        this.router.delete("/", AuthRoutes.protect, async (req, res) => {
+            // Slet brugeren og alle dens spil og ejerskaber
+
+            const userId = (req.user as User).id
+
+            console.log("Deleting user", userId)
+
+            await prisma.user.deleteMany({
+                where: {
+                    id: userId
+                }
+            })
+
+            res.json({ message: "User deleted" })
+        });
+
         this.router.get("/games", AuthRoutes.protect, async (req, res) => {
 
             const userId = (req.user as User).id

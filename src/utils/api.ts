@@ -72,6 +72,10 @@ export class Api {
     this.fetch(`/games/${id}`, "DELETE");
   }
 
+  public static deleteUser() {
+    this.fetch(`/users`, "DELETE");
+  }
+
   // Hent alle spil fra serveren
   public static async getGames(): Promise<Game[]> {
     return new Promise((resolve, reject) => {
