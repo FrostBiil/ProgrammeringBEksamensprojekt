@@ -25,7 +25,6 @@ import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
 import { AuthContext } from "../contexts/AuthProvider";
 
-
 interface CardProps {
   image: string;
   title: string;
@@ -35,8 +34,8 @@ interface CardProps {
 export function StorePage() {
   const [games, setGames] = useState<Game[]>([]);
   const theme = useMantineTheme();
-  const { user} = useContext(AuthContext);
-  
+  const { user } = useContext(AuthContext);
+
   useEffect(() => {
     Api.getGames().then((games) => {
       console.log(games);
@@ -107,14 +106,16 @@ export function StorePage() {
       ) : null}
 
       <Group mt="xs">
-        {
-          user && (<Button size="sm" onClick={() => Api.addGameToUser(user!.id, item.id)}>Tilføj spil</Button>)
-        }
-        
-
-        <ActionIcon variant="default" radius="md" size={36}>
-          <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
-        </ActionIcon>
+        {user && (
+          <>
+            <Button size="sm" onClick={() => Api.addGameToUser(item.id)}>
+              Tilføj spil
+            </Button>{" "}
+            <ActionIcon variant="default" radius="md" size={36}>
+              <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
+            </ActionIcon>
+          </>
+        )}
       </Group>
     </Paper>
   ));

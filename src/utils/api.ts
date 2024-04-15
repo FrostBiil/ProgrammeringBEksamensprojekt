@@ -100,18 +100,18 @@ export class Api {
   }
 
   // Tilføj et spil til en bruger
-  public static async addGameToUser(userId: string, gameId: string) {
-    await this.fetch(`/users/${userId}/games/${gameId}`, "POST");
+  public static async addGameToUser(gameId: string) {
+    await this.fetch(`/users/games/${gameId}`, "POST");
   }
 
   // Fjern et spil fra en bruger
-  public static async removeGameFromUser(userId: string, gameId: string) {
-    await this.fetch(`/users/${userId}/games/${gameId}`, "DELETE");
+  public static async removeGameFromUser(gameId: string) {
+    await this.fetch(`/users//games/${gameId}`, "DELETE");
   }
 
   // Hent alle spil fra en bruger
-  public static async getUserGames(userId: string): Promise<Game[]> {
-    const res = await this.fetch(`/users/${userId}/games`);
+  public static async getUserGames(): Promise<Game[]> {
+    const res = await this.fetch(`/users/games`);
     if (res.status === 200) {
       return (await res.json()).data as Game[];
     } else {
