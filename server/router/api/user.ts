@@ -8,6 +8,22 @@ class UserRouter extends Router {
 
     public routes() {
 
+        this.router.get("/games", AuthRoutes.protect, async (req, res) => {
+
+            const userId = (req.user as User).id
+
+            res.json(
+                await prisma.gameOwner.findMany({
+                    where: {
+                        userId
+                    },
+                    include: {
+                        game: true
+                    }
+                })
+            )
+
+        })
 
         this.router.post("/games/:gameId", AuthRoutes.protect, async (req, res) => {
 
