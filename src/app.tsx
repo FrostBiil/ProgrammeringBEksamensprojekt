@@ -13,6 +13,7 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { StorePage } from "./pages/StorePage";
 import { LibraryPage } from "./pages/LibraryPage";
 import { UploadPage } from "./pages/UploadPage";
+import { GamePage } from "./pages/GamePage";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/bibliotek" element={<LibraryPage />} />
               <Route path="/upload" element={<UploadPage />} />
               <Route path="/indstillinger" element={<SettingsPage />} />
+              <Route path="/game/:id" element={<GamePage />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </AppShell.Main>

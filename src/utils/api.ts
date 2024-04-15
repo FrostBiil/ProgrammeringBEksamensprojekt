@@ -113,6 +113,15 @@ export class Api {
     return await this.fetch(`/users/games/${gameId}`, "DELETE");
   }
 
+  public static async getRepositories(): Promise<string[]> {
+    const res = await this.fetch("/users/repositories");
+    if (res.status === 200) {
+      return (await res.json());
+    } else {
+      return [];
+    }
+  }
+
   // Hent alle spil fra en bruger
   public static async getUserGames(): Promise<GameOwner[]> {
     const res = await this.fetch(`/users/games`);

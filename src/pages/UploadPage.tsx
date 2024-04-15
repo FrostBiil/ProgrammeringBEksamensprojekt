@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  Autocomplete,
   Button,
   Checkbox,
   Container,
@@ -46,6 +47,8 @@ export function UploadPage() {
   const { user, loaded } = useContext(AuthContext);
   const [screenshots, setScreenshots] = useState<string[]>([]);
 
+  const [projects, setProjects] = useState<string[]>([]);
+
   const theme = useMantineTheme();
 
   const form = useForm<FormValues>({
@@ -87,13 +90,6 @@ export function UploadPage() {
     },
     {
       withAsterisk: true,
-      label: "Project URL",
-      placeholder: "https://github.com/username/repo",
-      id: "projectUrl",
-      ...form.getInputProps("projectUrl"),
-    },
-    {
-      withAsterisk: true,
       label: "Kort beskrivelse",
       placeholder: "Dette spil er fedt, fordi...",
       id: "description",
@@ -102,9 +98,17 @@ export function UploadPage() {
   ];
 
   useEffect(() => {
-    console.log(user)
-    if (!user && loaded) {
+
+    if (!loaded) return;
+
+    if (!user) {
       Api.login();
+    }
+
+    if (user) {
+      Api.getRepositories().then((projects) => {
+        setProjects(projects);
+      });
     }
   }, [user, loaded]);
 
@@ -128,11 +132,18 @@ export function UploadPage() {
         >
           <Grid>
             <Grid.Col span={7}>
+
+              <Autocomplete pt="md"
+                data={projects}
+                label="GitHub URL"
+                placeholder="https://github.com/user/repo"
+              />
+
               {formItemsText.map((props) => (
                 <TextInput
                   pt="md"
-                  {...props}
-                  onChange={(v) => form.setFieldValue(props.id, v.target.value)}
+              {...props}
+              onChange={(v) => form.setFieldValue(props.id, v.target.value)}
                 />
               ))}
 
