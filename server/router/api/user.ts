@@ -34,7 +34,7 @@ class UserRouter extends Router {
                         userId
                     },
                     include: {
-                        game: true
+                        game: true,
                     }
                 })
             )
