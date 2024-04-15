@@ -33,7 +33,7 @@ function App() {
               <Route path="/hjem" element={<HomePage />} />
               <Route path="/butik" element={<StorePage />} />
               <Route path="/bibliotek" element={<LibraryPage />} />
-              <Route path="/opload" element={<UploadPage />} />
+              <Route path="/upload" element={<UploadPage />} />
               <Route path="/indstillinger" element={<SettingsPage />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>

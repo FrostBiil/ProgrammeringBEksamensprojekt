@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { AuthContext } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
 import {
@@ -56,11 +56,11 @@ export function Navbar() {
     () => [
       { icon: <IconBuildingStore />, label: "Butik", path: "/butik" },
       { icon: <IconBooks />, label: "Bibliotek", path: "/bibliotek" },
-      { icon: <IconUpload />, label: "Opload", path: "/opload"},
-      { icon: <IconAdjustmentsAlt />, label: "Indstillinger", path: "/indstillinger"},
+      { icon: <IconUpload />, label: "Upload", path: "/upload" },
+      { icon: <IconAdjustmentsAlt />, label: "Indstillinger", path: "/indstillinger" },
       { icon: <IconLogout />, label: "Log ud", onClick: () => logout() },
     ],
-    [logout, user]
+    [logout]
   );
 
   return (

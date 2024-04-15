@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -16,6 +16,7 @@ import { useForm } from "@mantine/form";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { ImageConverter } from "../utils/imageConverter";
 import { Api } from "../utils/api";
+import { AuthContext } from "../contexts/AuthProvider";
 
 interface FormValues {
   projectUrl: string;
@@ -42,6 +43,7 @@ const Genres = [
 
 export function UploadPage() {
   const [cover, setCoverImage] = useState<string | undefined>(undefined);
+  const { user, loaded } = useContext(AuthContext);
   const [screenshots, setScreenshots] = useState<string[]>([]);
 
   const theme = useMantineTheme();
@@ -98,6 +100,13 @@ export function UploadPage() {
       ...form.getInputProps("description"),
     },
   ];
+
+  useEffect(() => {
+    console.log(user)
+    if (!user && loaded) {
+      Api.login();
+    }
+  }, [user, loaded]);
 
   return (
     <Container mt={"xl"}>
@@ -166,10 +175,6 @@ export function UploadPage() {
                   {...form.getInputProps("termsOfService", { type: "checkbox" })}
                 />
               </Checkbox.Group>
-
-              <Group justify="flex-end" mt="md">
-                <Button type="submit">Udgiv</Button>
-              </Group>
             </Grid.Col>
             <Grid.Col span={5}>
               <h5>Frontbillede</h5>
@@ -245,6 +250,7 @@ export function UploadPage() {
               </Dropzone>
             </Grid.Col>
           </Grid>
+          <Button fullWidth mt={"lg"} type="submit">Udgiv</Button>
         </form>
       </Paper>
     </Container>
