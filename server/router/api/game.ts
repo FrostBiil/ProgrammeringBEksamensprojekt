@@ -22,6 +22,9 @@ class GameRoute extends Router {
     public routes() {
 
         this.router.get("/", (req, res) => {
+
+            const user = req.user;
+
             const search: string = req.query.search as string || ""
             const genres: Genre[] = (req.query.genres as string || "").split(",").filter(Boolean) as Genre[]
             const tags: string[] = (req.query.tags as string || "").split(",").filter(Boolean) as string[]
@@ -35,7 +38,7 @@ class GameRoute extends Router {
                 orderBy: {
                     owners: {
                         _count: "desc"
-                    }
+                    },
                 },
 
                 where: {
@@ -59,6 +62,14 @@ class GameRoute extends Router {
                             }
                         }
                     ] : undefined,
+
+                    NOT: user ? {
+                        owners: {
+                            some: {
+                                userId: (user as User).id
+                            }
+                        }
+                    } : undefined,
 
                     visibility: "Public"
                 }

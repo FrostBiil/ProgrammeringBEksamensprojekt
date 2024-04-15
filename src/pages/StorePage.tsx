@@ -108,7 +108,7 @@ export function StorePage() {
       <Group mt="xs">
         {user && (
           <>
-            <Button size="sm" onClick={() => Api.addGameToUser(item.id)}>
+            <Button size="sm" onClick={async () => console.log(await Api.addGameToUser(item.id))}>
               Tilføj spil
             </Button>{" "}
             <ActionIcon variant="default" radius="md" size={36}>

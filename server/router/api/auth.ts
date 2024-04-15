@@ -1,4 +1,4 @@
-import passport, { authorize } from "passport";
+import passport from "passport";
 import Router from "../Router";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { prisma } from "../../utils/db";

@@ -101,12 +101,12 @@ export class Api {
 
   // Tilføj et spil til en bruger
   public static async addGameToUser(gameId: string) {
-    await this.fetch(`/users/games/${gameId}`, "POST");
+    return (await this.fetch(`/users/games/${gameId}`, "POST")).json();
   }
 
   // Fjern et spil fra en bruger
   public static async removeGameFromUser(gameId: string) {
-    await this.fetch(`/users//games/${gameId}`, "DELETE");
+    return await this.fetch(`/users//games/${gameId}`, "DELETE");
   }
 
   // Hent alle spil fra en bruger
