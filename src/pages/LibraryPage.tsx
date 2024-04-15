@@ -1,10 +1,5 @@
-import React from 'react';
+import React from "react";
 
 export function LibraryPage() {
-  
-    return (
-        <div>
-          <h1>Bibliotek!</h1>
-        </div>
-    );
+  return <h1>Bibliotek!</h1>;
 }

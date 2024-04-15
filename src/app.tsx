@@ -2,6 +2,9 @@ import React from "react";
 import { AppShell } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "@mantine/core/styles.css";
+import '@mantine/carousel/styles.css';
+import '@mantine/dropzone/styles.css';
+import '@mantine/notifications/styles.css';
 import { HomePage } from "./pages/HomePage";
 import { ErrorPage } from "./pages/ErrorPage";
 import { AuthProvider } from "./contexts/AuthProvider";
@@ -16,7 +19,6 @@ function App() {
     <AuthProvider>
       <Router>
         <AppShell
-          padding={"md"}
           navbar={{
             width: 100,
             breakpoint: "sm",
