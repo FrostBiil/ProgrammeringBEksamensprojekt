@@ -1,10 +1,13 @@
 import {
   Image,
   Title,
+  Text,
   Button,
   Divider,
   Grid,
   Group,
+  Flex,
+  Pill,
 } from "@mantine/core";
 import { Game, GameOwner } from "@prisma/client";
 import React, { useContext, useEffect, useState } from "react";
@@ -14,8 +17,7 @@ import { AuthContext } from "../contexts/AuthProvider";
 
 export function LibraryPage() {
   const [ownerships, setOwnerships] = useState<GameOwner[]>([]);
-  const theme = useMantineTheme();
-  const { user } = useContext(AuthContext);
+  const { user, loaded } = useContext(AuthContext);
 
   useEffect(() => {
     Api.getUserGames().then((ownerships) => {
