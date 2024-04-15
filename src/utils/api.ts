@@ -40,7 +40,7 @@ export class Api {
 
   public static logout() {
     // /api/auth/logout
-    Api.fetch("/auth/logout");
+    Api.fetch("/auth/logout")
   }
 
   public static async me(): Promise<User | null> {

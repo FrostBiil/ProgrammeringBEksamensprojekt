@@ -109,7 +109,7 @@ export function Navbar() {
             key={index}
             icon={item.icon}
             label={item.label}
-            path={item.label}
+            path={item.path ?? "#"}
             onClick={item.onClick}
           />
         ))}
