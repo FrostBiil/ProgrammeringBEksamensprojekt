@@ -8,6 +8,7 @@ import {
   Button,
   useMantineTheme,
   Divider,
+  ActionIcon,
   Box,
   Flex,
   Pill,
@@ -44,25 +45,21 @@ export function StorePage() {
 
   const featuredGames = games.slice(0, 5).map((item) => (
     <Carousel.Slide key={item.id}>
-      <Paper shadow="md" withBorder radius="lg" p="lg">
+      <Paper shadow="md" withBorder radius="lg" style={{ overflow: "clip", position: "relative" }}>
         <Image
-          style={{ aspectRatio: 16 / 6 }}
-          radius="md"
+          style={{ aspectRatio: 16 / 9 }}
           src={item.cover}
           alt={item.title}
         />
-        <Title
-          order={3}
-          py="md"
-          textWrap="nowrap"
-          style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-        >
-          {item.title}
-        </Title>
-        <Text c="gray" pb="md">
-          {item.genres.join(", ")}
-        </Text>
-        {addGameButton(item)}
+        <Box pos={"absolute"} style={{
+          width: "100%",
+          bottom: 0,
+          backgroundImage: "linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0))",
+        }}>
+          <Title order={3} pt="md">
+            {item.title}
+          </Title>
+        </Box>
       </Paper>
     </Carousel.Slide>
   ));

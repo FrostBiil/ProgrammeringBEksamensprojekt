@@ -1,4 +1,4 @@
-import { Game } from "@prisma/client";
+import { Game, GameOwner } from "@prisma/client";
 import { API_BASEURL, IS_PRODUCTION } from "./config";
 
 export class Api {
@@ -114,10 +114,10 @@ export class Api {
   }
 
   // Hent alle spil fra en bruger
-  public static async getUserGames(): Promise<{game: Game}[]> {
+  public static async getUserGames(): Promise<GameOwner[]> {
     const res = await this.fetch(`/users/games`);
     if (res.status === 200) {
-      return await res.json();
+      return (await res.json());
     } else {
       return [];
     }
