@@ -64,7 +64,7 @@ export class Api {
     cover: string;
     screenshots: string[];
   }) {
-    this.fetch("/games", "POST", gameData);
+    return this.fetch("/games", "POST", gameData);
   }
 
   // Slet et spil fra serveren

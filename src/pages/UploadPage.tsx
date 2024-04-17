@@ -127,7 +127,7 @@ export function UploadPage() {
               return;
             }
 
-            Api.publishGame({ ...values, cover, screenshots });
+            Api.publishGame({ ...values, cover, screenshots }).finally(() => {window.location.reload()});
           })}
         >
           <Grid>
@@ -263,6 +263,7 @@ export function UploadPage() {
               </Dropzone>
             </Grid.Col>
           </Grid>
+          {/*eslint-disable-next-line no-restricted-globals*/}
           <Button fullWidth mt={"lg"} type="submit">Udgiv</Button>
         </form>
       </Paper>

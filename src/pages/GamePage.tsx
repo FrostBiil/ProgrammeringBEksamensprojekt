@@ -5,9 +5,7 @@ import {
   Container,
   Paper,
   Image,
-  useMantineTheme,
   Grid,
-  GridCol,
 } from "@mantine/core";
 
 interface Game {
@@ -29,8 +27,6 @@ export function GamePage() {
   const { id } = useParams();
 
   const [game, setGame] = useState<Game | null>(null);
-
-  const theme = useMantineTheme();
 
   useEffect(() => {
     if (id === undefined) {
