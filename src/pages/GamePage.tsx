@@ -19,7 +19,6 @@ import {
   Title,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { ErrorPage } from "./ErrorPage";
 
 interface Game {
   id: string;
