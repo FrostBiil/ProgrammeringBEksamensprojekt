@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { IconHeart } from "@tabler/icons-react";
 import { Carousel } from "@mantine/carousel";
-import { useMediaQuery } from "@mantine/hooks";
 import {
   Image,
   Paper,
@@ -9,120 +7,120 @@ import {
   Title,
   Button,
   useMantineTheme,
-  Container,
   Divider,
-  ActionIcon,
-  rem,
   Box,
   Flex,
-  Chip,
   Pill,
-  Grid,
   SimpleGrid,
   Group,
+  Input,
+  MultiSelect,
+  TagsInput,
+  Center,
+  Loader,
 } from "@mantine/core";
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
 import { AuthContext } from "../contexts/AuthProvider";
-
-interface CardProps {
-  image: string;
-  title: string;
-  genre: string;
-}
+import { GameCardLarge } from "../components/GameCardLarge";
+import { useDebouncedState } from "@mantine/hooks";
 
 export function StorePage() {
+
   const [games, setGames] = useState<Game[]>([]);
   const theme = useMantineTheme();
   const { user } = useContext(AuthContext);
 
+  const [search, setSearch] = useDebouncedState("", 200);
+  const [genres, setGenres] = useState<string[] | undefined>(undefined);
+  const [tags, setTags] = useDebouncedState<string[]>([], 200);
+
+  const [loading, setLoading] = useState(true);
+
+
   useEffect(() => {
-    Api.getGames().then((games) => {
+    Api.getGames(search.length > 0 ? search : undefined, genres && (genres?.length > 0) ? genres : undefined, tags.length > 0 ? tags : undefined).then((games) => {
       console.log(games);
       setGames(games);
+      setLoading(false);
     });
-  }, []);
+  }, [search, genres, tags]);
 
   const addGameButton = (item: Game) => {
     return user ? (
-      <Group mt="xs">
-        <Button size="sm" onClick={() => Api.addGameToUser(item.id)}>
+      <SimpleGrid mt={"md"} cols={2} w={"100%"}>
+        <Button size="sm" variant="outline" onClick={() => {
+          window.location.href = `/spil/${item.id}`;
+        }} >
+          Se detaljer
+        </Button>
+        <Button size="sm" onClick={() => {
+          Api.addGameToUser(item.id);
+
+          setGames(games.filter((game) => game.id !== item.id));
+        }}>
           Tilføj spil
         </Button>
-      </Group>
+      </SimpleGrid>
     ) : (
       <></>
     );
   };
 
-  const featuredGames = games.slice(0, 5).map((item) => (
-    <Carousel.Slide key={item.id}>
-      <Paper shadow="md" withBorder radius="lg" p="lg">
+  const featuredGames = games.slice(0, 5).map((item) => {
+    return <Carousel.Slide key={item.id}>
+      <GameCardLarge game={item} />
+    </Carousel.Slide>
+  });
+
+  const gridElements = games.map((item) => (
+    <Paper key={item.id} shadow="md" withBorder radius="lg" p="lg">
+      <Flex direction={"column"} h={"100%"}>
         <Image
-          style={{ aspectRatio: 16 / 6 }}
+          style={{ aspectRatio: 16 / 9 }}
           radius="md"
           src={item.cover}
           alt={item.title}
         />
-        <Title
-          order={3}
-          py="md"
-          textWrap="nowrap"
-          style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-        >
+        <Title order={3} pt="md">
           {item.title}
         </Title>
         <Text color="gray" pb="md">
           {item.genres.join(", ")}
         </Text>
-        {addGameButton(item)}
-      </Paper>
-    </Carousel.Slide>
-  ));
-
-  const gridElements = games.map((item) => (
-    <Paper key={item.id} shadow="md" withBorder radius="lg" p="lg">
-      <Image
-        style={{ aspectRatio: 16 / 9 }}
-        radius="md"
-        src={item.cover}
-        alt={item.title}
-      />
-      <Title order={3} pt="md">
-        {item.title}
-      </Title>
-      <Text color="gray" pb="md">
-        {item.genres.join(", ")}
-      </Text>
-      <Text fz="sm" mt="xs">
-        {item.description}
-      </Text>
-      {item.tags.length > 0 ? (
-        <>
-          <Divider mt="md" labelPosition="left" label="Tags" />
-          <Flex wrap={"wrap"} gap="md" pt={"md"}>
-            {item.tags.map((tag) => (
-              <Pill key={tag} color="blue" style={{ marginRight: 5 }}>
-                {tag}
-              </Pill>
-            ))}
-          </Flex>
-          <Divider mt="xs" />
-        </>
-      ) : null}
-
-      <Group mt="xs">
-        {user && (
+        <Text fz="sm" mt="xs">
+          {item.description}
+        </Text>
+        {item.tags.length > 0 ? (
           <>
-            {addGameButton(item)}
-            <ActionIcon variant="default" radius="md" size={36}>
-              <IconHeart color={theme.colors["red"][6]} stroke={1.5} />
-            </ActionIcon>
+            <Divider mt="md" labelPosition="left" label="Tags" />
+            <Flex wrap={"wrap"} gap="md" pt={"md"}>
+              {item.tags.map((tag) => (
+                <Pill key={tag} color="blue" style={{ marginRight: 5 }}>
+                  {tag}
+                </Pill>
+              ))}
+            </Flex>
+            <Divider mt="xs" />
           </>
-        )}
-      </Group>
+        ) : null}
+
+        <Box style={{ flexGrow: 1 }} />
+
+        <Group mt="xs">
+          {user && (
+            <>
+              {addGameButton(item)}
+            </>
+          )}
+        </Group>
+      </Flex>
     </Paper>
   ));
+
+  if (loading) return <Center pt={"xl"}>
+    <Loader />
+  </Center>
 
   return (
     <>
@@ -135,18 +133,70 @@ export function StorePage() {
           align="start"
           loop
           slidesToScroll={3}
+          style={{ overflow: "visible" }}
         >
           {featuredGames}
         </Carousel>
       </Box>
-      <Flex>
-        <Box bg={theme.colors[theme.primaryColor][0]} w={500}></Box>
-        <Box>
-          <SimpleGrid p="md" cols={5}>
-            {gridElements}
-          </SimpleGrid>
-        </Box>
-      </Flex>
+      <Box bg={theme.colors[theme.primaryColor][0]} p={"md"}
+        style={{
+          position: "sticky",
+          top: 0
+        }}>
+        <Title order={4}>Filtrer</Title>
+        <Flex
+          gap={"md"}
+          direction={"row"}
+        >
+          <Input
+            placeholder="Søg efter spil"
+            style={{
+              flexGrow: 3
+            }}
+            onChange={(e) => {
+              setSearch(e.currentTarget.value);
+            }}
+          />
+          <MultiSelect
+            style={{
+              flexGrow: 1
+            }}
+            data={[
+              "Action",
+              "Adventure",
+              "Casual",
+              "Indie",
+              "MassivelyMultiplayer",
+              "Racing",
+              "RPG",
+              "Simulation",
+              "Sports",
+              "Strategy",
+            ]}
+
+            placeholder="Genres"
+
+            onChange={(value) => {
+              setGenres(value);
+            }}
+          />
+          <TagsInput
+            style={{
+              flexGrow: 1
+            }}
+            placeholder="Tags"
+            value={tags}
+            onChange={(value) => {
+              setTags(value);
+            }}
+          />
+        </Flex>
+      </Box>
+      <Box>
+        <SimpleGrid p="md" cols={4}>
+          {gridElements}
+        </SimpleGrid>
+      </Box>
     </>
   );
 }

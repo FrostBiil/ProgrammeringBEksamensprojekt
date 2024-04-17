@@ -8,6 +8,38 @@ class UserRouter extends Router {
 
     public routes() {
 
+        this.router.delete("/", AuthRoutes.protect, async (req, res) => {
+            // Slet brugeren og alle dens spil og ejerskaber
+
+            const userId = (req.user as User).id
+
+            console.log("Deleting user", userId)
+
+            await prisma.user.deleteMany({
+                where: {
+                    id: userId
+                }
+            })
+
+            res.json({ message: "User deleted" })
+        });
+
+        this.router.get("/games", AuthRoutes.protect, async (req, res) => {
+
+            const userId = (req.user as User).id
+
+            res.json(
+                await prisma.gameOwner.findMany({
+                    where: {
+                        userId
+                    },
+                    include: {
+                        game: true,
+                    }
+                })
+            )
+
+        })
 
         this.router.post("/games/:gameId", AuthRoutes.protect, async (req, res) => {
 
@@ -100,6 +132,19 @@ class UserRouter extends Router {
             )
 
         })
+
+        this.router.get("/repositories", AuthRoutes.protect, async (req, res) => {
+            // Use the gitbug api to get tg
+
+            fetch(`https://api.github.com/users/${(req.user as User).username}/repos`, {
+                headers: {
+                    Authorization: `Bearer ${(req.user as User).accessToken}`
+                }
+            }).then(async (data) => {
+                const repos = await data.json() as { html_url: string }[]
+                res.json(repos.map((repo: any) => repo.html_url))
+            })
+        });
     }
 }
 

@@ -4,7 +4,7 @@ import App from "./app";
 import { MantineProvider, createTheme } from "@mantine/core";
 
 const theme = createTheme({
-  primaryColor: "blue",
+  primaryColor: window.localStorage.getItem("mantine-color-scheme") || "blue",
   primaryShade: 7,
 });
 

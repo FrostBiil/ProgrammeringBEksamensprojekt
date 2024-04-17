@@ -3,12 +3,14 @@ import { Api } from "../utils/api";
 
 interface AuthContextProps {
   user: User | null;
+  loaded: boolean;
   login: () => void;
   logout: () => void;
 }
 
 export function AuthProvider(props: React.PropsWithChildren<{}>) {
   const [user, setUser] = useState<User | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const login = () => {
     Api.login();
   };
@@ -21,11 +23,12 @@ export function AuthProvider(props: React.PropsWithChildren<{}>) {
   useEffect(() => {
     Api.me().then((user) => {
         setUser(user);
+        setLoaded(true);
     });
   }, []);
 
   return (
-    <AuthContext.Provider value={{user, login, logout}}>
+    <AuthContext.Provider value={{user, login, logout, loaded}}>
       {props.children}
     </AuthContext.Provider>
   );

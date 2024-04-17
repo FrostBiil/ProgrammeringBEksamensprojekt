@@ -1,4 +1,4 @@
-import { Game } from "@prisma/client";
+import { Game, GameOwner } from "@prisma/client";
 import { API_BASEURL, IS_PRODUCTION } from "./config";
 
 export class Api {
@@ -64,7 +64,7 @@ export class Api {
     cover: string;
     screenshots: string[];
   }) {
-    this.fetch("/games", "POST", gameData);
+    return this.fetch("/games", "POST", gameData);
   }
 
   // Slet et spil fra serveren
@@ -72,10 +72,28 @@ export class Api {
     this.fetch(`/games/${id}`, "DELETE");
   }
 
+  public static deleteUser() {
+    this.fetch(`/users`, "DELETE");
+  }
+
   // Hent alle spil fra serveren
-  public static async getGames(): Promise<Game[]> {
+  public static async getGames(search?: string, gengres?: string[], tags?: string[]): Promise<Game[]> {
+
+    const url = new URLSearchParams();
+    if (search) {
+      url.append("search", search);
+    }
+
+    if (gengres) {
+      url.append("genres", gengres.join(","));
+    }
+
+    if (tags) {
+      url.append("tags", tags.join(","));
+    }
+
     return new Promise((resolve, reject) => {
-      this.fetch("/games")
+      this.fetch(`/games?${url.toString()}`)
         .then((res) => {
           if (res.status === 200) {
             return res.json();
@@ -93,7 +111,7 @@ export class Api {
   public static async getGame(id: string): Promise<Game | null> {
     const res = await this.fetch(`/games/${id}`);
     if (res.status === 200) {
-      return (await res.json()).data as Game;
+      return (await res.json()) as Game;
     } else {
       return null;
     }
@@ -109,20 +127,22 @@ export class Api {
     return await this.fetch(`/users/games/${gameId}`, "DELETE");
   }
 
-  // Hent alle spil fra en bruger
-  public static async getUserGames(): Promise<Game[]> {
-    const res = await this.fetch(`/users/games`);
+  public static async getRepositories(): Promise<string[]> {
+    const res = await this.fetch("/users/repositories");
     if (res.status === 200) {
-      return (await res.json()).data as Game[];
+      return (await res.json());
     } else {
       return [];
     }
   }
 
-  
-
-
-
-
-
+  // Hent alle spil fra en bruger
+  public static async getUserGames(): Promise<GameOwner[]> {
+    const res = await this.fetch(`/users/games`);
+    if (res.status === 200) {
+      return (await res.json());
+    } else {
+      return [];
+    }
+  }
 }

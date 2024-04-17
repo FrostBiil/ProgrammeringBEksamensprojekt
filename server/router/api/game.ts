@@ -53,12 +53,14 @@ class GameRoute extends Router {
                     OR: search.length > 0 ? [
                         {
                             description: {
-                                contains: search as string
+                                contains: search as string,
+                                mode: "insensitive"
                             }
                         },
                         {
                             title: {
-                                contains: search as string
+                                contains: search as string,
+                                mode: "insensitive"
                             }
                         }
                     ] : undefined,
@@ -128,7 +130,7 @@ class GameRoute extends Router {
                 })
             }
 
-            if (!Array.isArray(tags) || tags.some((tag) => typeof tag !== "string" || tag.length < 3 || tag.length > 20)) {
+            if (!Array.isArray(tags) || tags.some((tag) => typeof tag !== "string" || tag.length < 2 || tag.length > 20)) {
                 return res.status(400).json({
                     message: "Tags must be an array of strings, where each string is at least 3 characters and at most 20 characters"
                 })

@@ -56,11 +56,11 @@ export function Navbar() {
     () => [
       { icon: <IconBuildingStore />, label: "Butik", path: "/butik" },
       { icon: <IconBooks />, label: "Bibliotek", path: "/bibliotek" },
-      { icon: <IconUpload />, label: "Opload", path: "/opload"},
-      { icon: <IconAdjustmentsAlt />, label: "Indstillinger", path: "/indstillinger"},
+      { icon: <IconUpload />, label: "Upload", path: "/upload" },
+      { icon: <IconAdjustmentsAlt />, label: "Indstillinger", path: "/indstillinger" },
       { icon: <IconLogout />, label: "Log ud", onClick: () => logout() },
     ],
-    [logout, user]
+    [logout]
   );
 
   return (
@@ -109,7 +109,7 @@ export function Navbar() {
             key={index}
             icon={item.icon}
             label={item.label}
-            path={item.label}
+            path={item.path ?? "#"}
             onClick={item.onClick}
           />
         ))}

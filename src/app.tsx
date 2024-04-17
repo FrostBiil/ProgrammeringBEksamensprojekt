@@ -2,10 +2,9 @@ import React from "react";
 import { AppShell } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "@mantine/core/styles.css";
-import '@mantine/carousel/styles.css';
-import '@mantine/dropzone/styles.css';
-import '@mantine/notifications/styles.css';
-import { HomePage } from "./pages/HomePage";
+import "@mantine/carousel/styles.css";
+import "@mantine/dropzone/styles.css";
+import "@mantine/notifications/styles.css";
 import { ErrorPage } from "./pages/ErrorPage";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { Navbar } from "./components/Navbar";
@@ -13,15 +12,16 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { StorePage } from "./pages/StorePage";
 import { LibraryPage } from "./pages/LibraryPage";
 import { UploadPage } from "./pages/UploadPage";
+import { GamePage } from "./pages/GamePage";
 
-function App() {
+export default function App() {
   return (
     <AuthProvider>
       <Router>
         <AppShell
           navbar={{
             width: 100,
-            breakpoint: "sm",
+            breakpoint: 0,
           }}
         >
           <AppShell.Navbar>
@@ -29,12 +29,12 @@ function App() {
           </AppShell.Navbar>
           <AppShell.Main>
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/hjem" element={<HomePage />} />
+              <Route path="/" element={<StorePage />} />
               <Route path="/butik" element={<StorePage />} />
               <Route path="/bibliotek" element={<LibraryPage />} />
-              <Route path="/opload" element={<UploadPage />} />
+              <Route path="/upload" element={<UploadPage />} />
               <Route path="/indstillinger" element={<SettingsPage />} />
+              <Route path="/spil/:id" element={<GamePage />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </AppShell.Main>
@@ -43,5 +43,3 @@ function App() {
     </AuthProvider>
   );
 }
-
-export default App;

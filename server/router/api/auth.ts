@@ -72,8 +72,11 @@ class AuthRoutes extends Router {
         })
 
         this.router.get("/logout", (req, res) => {
-            req.session?.destroy(() => {
-                res.redirect("/");
+            req.session?.destroy((msg) => {
+                if (msg)
+                    res.redirect("/error?m=" + msg)
+
+                res.redirect("/")
             })
         })
 
