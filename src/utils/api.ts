@@ -77,9 +77,23 @@ export class Api {
   }
 
   // Hent alle spil fra serveren
-  public static async getGames(): Promise<Game[]> {
+  public static async getGames(search?: string, gengres?: string[], tags?: string[]): Promise<Game[]> {
+
+    const url = new URLSearchParams();
+    if (search) {
+      url.append("search", search);
+    }
+
+    if (gengres) {
+      url.append("genres", gengres.join(","));
+    }
+
+    if (tags) {
+      url.append("tags", tags.join(","));
+    }
+
     return new Promise((resolve, reject) => {
-      this.fetch("/games")
+      this.fetch(`/games?${url.toString()}`)
         .then((res) => {
           if (res.status === 200) {
             return res.json();
