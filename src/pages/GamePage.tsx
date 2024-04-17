@@ -13,6 +13,8 @@ import {
   useMantineTheme,
   Button,
   Group,
+  Center,
+  Loader,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 
@@ -35,6 +37,8 @@ export function GamePage() {
   const { id } = useParams();
 
   const [game, setGame] = useState<Game | null>(null);
+
+  const [loading, setLoading] = useState(true);
 
   const theme = useMantineTheme();
 
@@ -59,12 +63,18 @@ export function GamePage() {
     }
     Api.getGame(id).then((game) => {
       setGame(game);
+
+      setLoading(false);
     });
   }, [id]);
 
-  if (game === null) {
-    return <Container>Loading...</Container>;
-  }
+  if (loading || game === null)
+    return (
+      <Center pt={"xl"}>
+        <Loader />
+      </Center>
+    );
+
   return (
     <>
       <Container mt={"xl"}>
