@@ -39,7 +39,7 @@ export function LibraryPage() {
 
   const goToGamePageButton = (item: Game) => {
     return (
-      <Group mt="xs">
+      <Group pt="xs">
         <Button size="sm" onClick={() => window.open("/spil/" + item.id)}>
           Se spil
         </Button>
@@ -71,12 +71,12 @@ export function LibraryPage() {
           <Text c="gray" pb="md">
             {(item.genres ?? []).join(", ")}
           </Text>
-          <Text fz="sm" mt="xs">
+          <Text fz="sm" pt="xs">
             {item.description}
           </Text>
           {item.tags && item.tags.length > 0 ? (
             <>
-              <Divider mt="md" labelPosition="left" label="Tags" />
+              <Divider pt="md" labelPosition="left" label="Tags" />
               <Flex wrap={"wrap"} gap="md" pt={"md"}>
                 {item.tags.map((tag) => (
                   <Pill key={tag} color="blue" style={{ marginRight: 5 }}>
@@ -84,7 +84,7 @@ export function LibraryPage() {
                   </Pill>
                 ))}
               </Flex>
-              <Divider mt="xs" />
+              <Divider pt="xs" />
             </>
           ) : (
             <></>
@@ -102,19 +102,19 @@ export function LibraryPage() {
 
   return (
     <>
-      <Divider mx="md" labelPosition="left" label={"Senest spil"} />
-      <Grid columns={3} p="md">
-        {games(1, true).slice(0, 3)}
-      </Grid>
+        <Divider px="md" labelPosition="left" label={"Senest spil"} />
+        <Grid columns={3} p="md">
+          {games(1, true).slice(0, 3)}
+        </Grid>
 
-      <Divider
-        mx="md"
-        labelPosition="left"
-        label={"Spil " + ownerships.length}
-      />
-      <Grid columns={5} p="md">
-        {games(1)}
-      </Grid>
+        <Divider
+          px="md"
+          labelPosition="left"
+          label={"Spil " + ownerships.length}
+        />
+        <Grid columns={5} p="md">
+          {games(1)}
+        </Grid>
     </>
   );
 }
