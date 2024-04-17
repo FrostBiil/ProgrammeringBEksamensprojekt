@@ -16,6 +16,8 @@ import {
   Input,
   MultiSelect,
   TagsInput,
+  Center,
+  Loader,
 } from "@mantine/core";
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
@@ -24,6 +26,7 @@ import { GameCardLarge } from "../components/GameCardLarge";
 import { useDebouncedState } from "@mantine/hooks";
 
 export function StorePage() {
+
   const [games, setGames] = useState<Game[]>([]);
   const theme = useMantineTheme();
   const { user } = useContext(AuthContext);
@@ -32,23 +35,33 @@ export function StorePage() {
   const [genres, setGenres] = useState<string[] | undefined>(undefined);
   const [tags, setTags] = useDebouncedState<string[]>([], 200);
 
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     Api.getGames(search.length > 0 ? search : undefined, genres && (genres?.length > 0) ? genres : undefined, tags.length > 0 ? tags : undefined).then((games) => {
       console.log(games);
       setGames(games);
+      setLoading(false);
     });
   }, [search, genres, tags]);
 
   const addGameButton = (item: Game) => {
     return user ? (
-      <Button fullWidth mt={"md"} size="sm" onClick={() => {
-        Api.addGameToUser(item.id);
+      <SimpleGrid mt={"md"} cols={2} w={"100%"}>
+        <Button size="sm" variant="outline" onClick={() => {
+          window.location.href = `/spil/${item.id}`;
+        }} >
+          Se detaljer
+        </Button>
+        <Button size="sm" onClick={() => {
+          Api.addGameToUser(item.id);
 
-        setGames(games.filter((game) => game.id !== item.id));
-      }}>
-        Tilføj spil
-      </Button>
+          setGames(games.filter((game) => game.id !== item.id));
+        }}>
+          Tilføj spil
+        </Button>
+      </SimpleGrid>
     ) : (
       <></>
     );
@@ -104,6 +117,10 @@ export function StorePage() {
       </Flex>
     </Paper>
   ));
+
+  if (loading) return <Center pt={"xl"}>
+    <Loader />
+  </Center>
 
   return (
     <>

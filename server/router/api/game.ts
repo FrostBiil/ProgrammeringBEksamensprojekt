@@ -53,12 +53,14 @@ class GameRoute extends Router {
                     OR: search.length > 0 ? [
                         {
                             description: {
-                                contains: search as string
+                                contains: search as string,
+                                mode: "insensitive"
                             }
                         },
                         {
                             title: {
-                                contains: search as string
+                                contains: search as string,
+                                mode: "insensitive"
                             }
                         }
                     ] : undefined,
