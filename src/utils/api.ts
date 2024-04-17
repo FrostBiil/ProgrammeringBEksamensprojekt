@@ -97,7 +97,7 @@ export class Api {
   public static async getGame(id: string): Promise<Game | null> {
     const res = await this.fetch(`/games/${id}`);
     if (res.status === 200) {
-      return (await res.json()).data as Game;
+      return (await res.json()) as Game;
     } else {
       return null;
     }
