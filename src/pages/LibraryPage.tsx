@@ -84,10 +84,10 @@ export function LibraryPage() {
   return (
     <>
       <Divider mx="md" labelPosition="left" label={"Senest spil"} />
-      <Grid p="md">{games(2, true)}</Grid>
+      <Grid columns={3} p="md">{games(1, true).slice(0, 3)}</Grid>
 
       <Divider mx="md" labelPosition="left" label={"Spil " + ownerships.length} />
-      <Grid p="md">{games(2)}</Grid>
+      <Grid columns={5} p="md">{games(1)}</Grid>
     </>
   );
 }
