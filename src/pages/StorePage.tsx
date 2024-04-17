@@ -8,7 +8,6 @@ import {
   Button,
   useMantineTheme,
   Divider,
-  ActionIcon,
   Box,
   Flex,
   Pill,
@@ -18,7 +17,6 @@ import {
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";
 import { AuthContext } from "../contexts/AuthProvider";
-import { useHover } from "@mantine/hooks";
 import { GameCardLarge } from "../components/GameCardLarge";
 
 export function StorePage() {
