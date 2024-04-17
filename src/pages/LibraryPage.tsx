@@ -43,6 +43,16 @@ export function LibraryPage() {
     );
   };
 
+  const goToGamePageButton = (item: Game) => {
+    return (
+      <Group mt="xs">
+        <Button size="sm" onClick={() => window.open("/spil/" + item.id)}>
+          Se spil
+        </Button>
+      </Group>
+    );
+  }
+
   const games = (span?: number, sortedByDate?: boolean) => ownerships
     .sort((a, b) => sortedByDate ? (new Date(b.date).getTime() - new Date(a.date).getTime()) : (a as any as { game: Game }).game.title.localeCompare((b as any as { game: Game }).game.title))
     .map(o => (o as any as { game: Game }).game).map((item) => (
@@ -77,7 +87,7 @@ export function LibraryPage() {
         ) : (
           <></>
         )}
-        {downloadGameButton(item)}
+        {goToGamePageButton(item)}
       </Grid.Col>
     ));
 
