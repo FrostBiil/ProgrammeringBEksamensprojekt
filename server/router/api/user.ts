@@ -142,7 +142,6 @@ class UserRouter extends Router {
                 }
             }).then(async (data) => {
                 const repos = await data.json() as { html_url: string }[]
-                console.log(repos)
                 res.json(repos.map((repo: any) => repo.html_url))
             })
         });
