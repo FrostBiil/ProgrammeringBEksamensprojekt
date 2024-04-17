@@ -136,10 +136,14 @@ class UserRouter extends Router {
         this.router.get("/repositories", AuthRoutes.protect, async (req, res) => {
             // Use the gitbug api to get tg
 
-            fetch(`https://api.github.com/users/${(req.user as User).username}/repos`).then(async (data) => {
-                res.json((await data.json()).map((repo: any) => repo.html_url))
-            }).catch(() => {
-                res.status(500).json({ error: "Could not fetch repositories" })
+            fetch(`https://api.github.com/users/${(req.user as User).username}/repos`, {
+                headers: {
+                    Authorization: `Bearer ${(req.user as User).accessToken}`
+                }
+            }).then(async (data) => {
+                const repos = await data.json() as { html_url: string }[]
+                console.log(repos)
+                res.json(repos.map((repo: any) => repo.html_url))
             })
         });
     }
