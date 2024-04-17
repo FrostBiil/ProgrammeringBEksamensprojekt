@@ -16,7 +16,6 @@ import {
   Input,
   MultiSelect,
   TagsInput,
-  Space,
 } from "@mantine/core";
 import { Game } from "@prisma/client";
 import { Api } from "../utils/api";

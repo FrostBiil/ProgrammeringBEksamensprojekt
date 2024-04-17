@@ -1,7 +1,19 @@
 import { useParams } from "react-router-dom";
 import { Api } from "../utils/api";
 import { useEffect, useState } from "react";
-import { Container, Paper, Image, Text, Flex, Box, Stack, Divider, Pill, useMantineTheme, Button, Group } from "@mantine/core";
+import {
+  Container,
+  Paper,
+  Image,
+  Text,
+  Flex,
+  Box,
+  Divider,
+  Pill,
+  useMantineTheme,
+  Button,
+  Group,
+} from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 
 interface Game {
@@ -29,7 +41,12 @@ export function GamePage() {
   const downloadGameButton = (item: Game) => {
     return (
       <Group mt="xs">
-        <Button size="sm" onClick={() => window.open(item.projectUrl + "/releases/latest")}>
+        <Button
+          fullWidth
+          justify="center"
+          size="sm"
+          onClick={() => window.open(item.projectUrl + "/releases/latest")}
+        >
           Download spil
         </Button>
       </Group>
@@ -52,8 +69,8 @@ export function GamePage() {
     <>
       <Container mt={"xl"}>
         <Paper withBorder shadow={"md"} p={"md"}>
-          <Flex>
-            <Stack>
+          <Flex h="100%">
+            <Flex direction={"column"} h={"100%"} p="xs">
               <Image
                 style={{ aspectRatio: 16 / 9 }}
                 radius="md"
@@ -71,31 +88,37 @@ export function GamePage() {
                   </Carousel.Slide>
                 ))}
               </Carousel>
-            </Stack>
-            <Stack>
-              <Box>
-                <Image
-                  style={{ aspectRatio: 16 / 9 }}
-                  radius="md"
-                  src={game.cover}
-                  alt={game.title}
-                />
-                <h3>{game.title}</h3>
-              </Box>
+            </Flex>
+            <Flex direction={"column"} p="xs" gap={"sm"}>
+              <Image
+                w={"10vw"}
+                style={{ aspectRatio: 16 / 9 }}
+                radius="md"
+                src={game.cover}
+                alt={game.title}
+              />
+              <h3>{game.title}</h3>
               <Text>{game.description}</Text>
-              <Divider label="Genres" />
+              <Divider label="Genres" labelPosition="left" />
               <Text>{game.genres.join(", ")}</Text>
-              <Divider label="Tags" />
+              <Divider label="Tags" labelPosition="left" />
               <Flex>
                 {game.tags.map((tag) => (
-                  <Pill key={tag} radius="xl" variant="filled" bg={theme.colors[theme.primaryColor][1]}>
+                  <Pill
+                    key={tag}
+                    radius="xl"
+                    variant="filled"
+                    bg={theme.colors[theme.primaryColor][1]}
+                  >
                     {tag}
                   </Pill>
                 ))}
               </Flex>
-              <Divider/>
+              <Divider />
+              <Box style={{ flexGrow: 1 }} />
+
               {downloadGameButton(game)}
-            </Stack>
+            </Flex>
           </Flex>
         </Paper>
       </Container>
