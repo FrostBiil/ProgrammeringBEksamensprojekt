@@ -113,7 +113,7 @@ export function UploadPage() {
   }, [user, loaded]);
 
   return (
-    <Container mt={"xl"}>
+    <Container py={"xl"}>
       <Paper shadow="md" p="xl">
         <h2>Upload et nyt projekt</h2>
         <form
@@ -135,7 +135,7 @@ export function UploadPage() {
 
               <Autocomplete pt="md"
                 data={projects}
-                label="GitHub URL"
+                label="Github URL"
                 withAsterisk
                 placeholder="https://github.com/user/repo"
                 {...form.getInputProps("projectUrl")}
