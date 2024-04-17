@@ -127,7 +127,7 @@ export function UploadPage() {
               return;
             }
 
-            Api.publishGame({ ...values, cover, screenshots }).finally(() => window.location.reload());
+            Api.publishGame({ ...values, cover, screenshots }).finally(() => {window.location.reload()});
           })}
         >
           <Grid>
