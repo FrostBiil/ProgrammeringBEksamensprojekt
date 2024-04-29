@@ -1,12 +1,18 @@
+// Importering af React fra react til at definere komponenter
 import { Paper, Flex, Box, Title, Image, Text } from "@mantine/core";
+
+// Importering af useHover fra Mantine hooks til at definere hover effekt
 import { useHover } from "@mantine/hooks";
+
+// Importering af Game fra prisma/client til at definere spil
 import { Game } from "@prisma/client";
-import React from "react";
 
+// Definering af GameCardLarge komponenten
 export function GameCardLarge(props: { game: Game }) {
-
+    // Definering af ref og hovered med useHover
     const { ref, hovered } = useHover()
 
+    // Returnering af GameCardLarge komponenten
     return <Paper ref={ref} shadow="md" style={{ overflow: "clip" }} withBorder radius="md" >
         <Flex direction={"column"} >
             <Image

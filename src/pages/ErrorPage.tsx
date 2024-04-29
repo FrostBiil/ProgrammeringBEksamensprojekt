@@ -1,10 +1,12 @@
-import React from "react";
+// Importering af Mantine-komponenter til opbygning af brugergrænsefladen
 import { Container, Title, Text, Button, SimpleGrid } from "@mantine/core";
 
+// Funktion til at navigere brugeren tilbage til hjemmesiden
 function goToHome() {
   window.location.href = "/";
 }
 
+// Komponent for en fejlside
 export function ErrorPage() {
   return (
     <Container pt="80px" pb="80px">

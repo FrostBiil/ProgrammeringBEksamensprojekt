@@ -1,6 +1,13 @@
+// Importering af useContext og useMemo fra react til at bruge hooks
 import React, { useContext, useMemo } from "react";
+
+// Importering af AuthContext fra AuthProvider
 import { AuthContext } from "../contexts/AuthProvider";
+
+// Importering af Link fra react-router-dom
 import { Link } from "react-router-dom";
+
+// Importering af nødvendige komponenter fra Mantine Core
 import {
   ActionIcon,
   Avatar,
@@ -10,6 +17,8 @@ import {
   Space,
   Tooltip,
 } from "@mantine/core";
+
+// Importering af ikoner fra Tabler Icons
 import {
   IconBuildingStore,
   IconBooks,
@@ -18,8 +27,11 @@ import {
   IconBrandGithub,
   IconLogout,
 } from "@tabler/icons-react";
+
+// Importering af Api til at logge ud
 import { Api } from "../utils/api";
 
+// Definering af NavbarItem komponenten
 export function NavbarItem({
   icon,
   label,
@@ -31,6 +43,7 @@ export function NavbarItem({
   path: string;
   onClick?: () => void;
 }) {
+  // Returnering af NavbarItem komponenten
   return (
     <Tooltip label={label} position="right">
       <Link to={path}>
@@ -49,9 +62,15 @@ export function NavbarItem({
   );
 }
 
+// Definering af Navbar komponenten
 export function Navbar() {
+  // Definering af bruger og logout fra AuthContext
   const { user, logout } = useContext(AuthContext);
+  
+  // Definering af theme fra useMantineTheme
   const theme = useMantineTheme();
+
+  // Definering af navbarItems med useMemo
   const navbarItems = useMemo(
     () => [
       { icon: <IconBuildingStore />, label: "Butik", path: "/butik" },
@@ -63,6 +82,7 @@ export function Navbar() {
     [logout]
   );
 
+  // Returnering af Navbar komponenten
   return (
     <Flex
       mih={"100%"}

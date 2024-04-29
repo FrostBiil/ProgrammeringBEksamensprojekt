@@ -1,3 +1,4 @@
+// Importering af nødvendige komponenter fra Mantine
 import {
   Image,
   Title,
@@ -11,17 +12,31 @@ import {
   Center,
   Loader,
 } from "@mantine/core";
+
+// Importering af nødvendige typer fra Prisma
 import { Game, GameOwner } from "@prisma/client";
-import React, { useContext, useEffect, useState } from "react";
+
+// Importering af nødvendige komponenter og hooks React
+import { useContext, useEffect, useState } from "react";
+
+// Importering af api til at hente data fra backend
 import { Api } from "../utils/api";
+
+// Importering af AuthContext fra AuthProvider
 import { AuthContext } from "../contexts/AuthProvider";
 
+// Definering af LibraryPage komponenten
 export function LibraryPage() {
+  // Definering af state til at gemme spil
   const [ownerships, setOwnerships] = useState<GameOwner[]>([]);
+  
+  // Henter bruger og om bruger er loaded fra AuthContext
   const { user, loaded } = useContext(AuthContext);
 
+  // Definering af state til at gemme om data er loaded
   const [loading, setLoading] = useState(true);
 
+  // Henter spil fra backend og gemmer dem i state
   useEffect(() => {
     Api.getUserGames().then((ownerships) => {
       console.log(ownerships);
@@ -30,6 +45,7 @@ export function LibraryPage() {
     });
   }, []);
 
+  // Hvis bruger ikke er loaded og bruger er loaded, så logges bruger ind
   useEffect(() => {
     console.log(user);
     if (!user && loaded) {
@@ -37,6 +53,7 @@ export function LibraryPage() {
     }
   }, [user, loaded]);
 
+  // Definering af goToGamePageButton funktionen
   const goToGamePageButton = (item: Game) => {
     return (
       <Group pt="xs">
@@ -47,6 +64,7 @@ export function LibraryPage() {
     );
   };
 
+  // Definering af games funktionen
   const games = (span?: number, sortedByDate?: boolean) =>
     ownerships
       .sort((a, b) =>
@@ -93,6 +111,7 @@ export function LibraryPage() {
         </Grid.Col>
       ));
 
+  // Hvis data er loading, så vises loader
   if (loading)
     return (
       <Center pt={"xl"}>
@@ -100,6 +119,7 @@ export function LibraryPage() {
       </Center>
     );
 
+  // Returnerer siden hvis der ikke loades
   return (
     <>
         <Divider px="md" labelPosition="left" label={"Senest spil"} />

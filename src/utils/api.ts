@@ -1,17 +1,22 @@
+// Importere Game og GameOwner fra Prisma for at strukturere spilinformation korrekt.
 import { Game, GameOwner } from "@prisma/client";
+
+// Importerer API_BASEURL og IS_PRODUCTION fra config.ts som bruges til at bestemme API-endepunkter
 import { API_BASEURL, IS_PRODUCTION } from "./config";
 
+// Definere klassen Api, som indeholder metoder til at håndtere netværksanmodninger
 export class Api {
+  // Hjælpemetode til at generere den fulde API endpoint sti baseret på driftsmiljø
   private static getEndpoint(endpoint: string) {
     if (IS_PRODUCTION) {
-      /** Production api endpoint er på den samme server */
+      /** Produktions-API endpoint findes på samme server */
       return API_BASEURL + endpoint;
     }
-
-    /** Development endpointet er ikke, da man ikke kan køre to webservere på samme port*/
+    /** Udviklingsendpoint, når to webservere ikke kan køre på samme port */
     return "http://localhost:3000/api" + endpoint;
   }
 
+  // Generisk fetch metode til at håndtere netværksanmodninger
   private static fetch(endpoint: string, method: string = "GET", body?: any) {
     return window.fetch(this.getEndpoint(endpoint), {
       method: method,
@@ -19,32 +24,25 @@ export class Api {
       headers: {
         "Content-Type": "application/json",
       },
-
-      // Nødvendigt for at kunne sende cookies med i fetch requesten, men kun i development da de kører på samme server i production
+      // Sender cookies afhængig af om koden kører i produktion eller udvikling
       credentials: IS_PRODUCTION ? "same-origin" : "include",
     });
   }
 
+  // Udfører login ved at omdirigere brugeren til autorisationssiden
   public static login(redirectSuccess?: string) {
-    // URL encode hvor den skal redirect til efter login (hvis ikke angivet, så redirecter den til den nuværende side)
     const currentUrl = window.location.href;
     const redirect = encodeURIComponent(redirectSuccess || currentUrl);
-
-    console.log(redirect);
-
-    // Redirect til /api/auth/github?redirect=URL
-    window.location.href = this.getEndpoint(
-      `/auth/github?redirect=${redirect}`
-    );
+    window.location.href = this.getEndpoint(`/auth/github?redirect=${redirect}`);
   }
 
+  // Udfører logud ved at kalde backendens logout endpoint
   public static logout() {
-    // /api/auth/logout
     Api.fetch("/auth/logout");
   }
 
+  // Henter den aktuelle bruger fra API'et
   public static async me(): Promise<User | null> {
-    // Fetch /api/auth/me
     const res = await this.fetch("/auth/me");
     if (res.status === 200) {
       return (await res.json()).data as User;
@@ -53,7 +51,7 @@ export class Api {
     }
   }
 
-  // Opret et nyt spil til serveren
+  // Publicerer et nyt spil til serveren
   public static publishGame(gameData: {
     projectUrl: string;
     title: string;
@@ -67,30 +65,22 @@ export class Api {
     return this.fetch("/games", "POST", gameData);
   }
 
-  // Slet et spil fra serveren
+  // Sletter et spil fra serveren ved spil-ID
   public static deleteGame(id: string) {
     this.fetch(`/games/${id}`, "DELETE");
   }
 
+  // Sletter en bruger
   public static deleteUser() {
     this.fetch(`/users`, "DELETE");
   }
 
-  // Hent alle spil fra serveren
-  public static async getGames(search?: string, gengres?: string[], tags?: string[]): Promise<Game[]> {
-
+  // Henter alle spil fra serveren baseret på søgekriterier
+  public static async getGames(search?: string, genres?: string[], tags?: string[]): Promise<Game[]> {
     const url = new URLSearchParams();
-    if (search) {
-      url.append("search", search);
-    }
-
-    if (gengres) {
-      url.append("genres", gengres.join(","));
-    }
-
-    if (tags) {
-      url.append("tags", tags.join(","));
-    }
+    if (search) url.append("search", search);
+    if (genres) url.append("genres", genres.join(","));
+    if (tags) url.append("tags", tags.join(","));
 
     return new Promise((resolve, reject) => {
       this.fetch(`/games?${url.toString()}`)
@@ -102,12 +92,12 @@ export class Api {
           }
         })
         .then((data) => {
-          resolve(data);
+          resolve(data as Game[]);
         });
     });
   }
 
-  // Hent et spil fra serveren
+  // Henter et specifikt spil ved ID
   public static async getGame(id: string): Promise<Game | null> {
     const res = await this.fetch(`/games/${id}`);
     if (res.status === 200) {
@@ -117,16 +107,17 @@ export class Api {
     }
   }
 
-  // Tilføj et spil til en bruger
+  // Tilføjer et spil til en brugers bibliotek
   public static async addGameToUser(gameId: string) {
     return (await this.fetch(`/users/games/${gameId}`, "POST")).json();
   }
 
-  // Fjern et spil fra en bruger
+  // Fjerner et spil fra en brugers bibliotek
   public static async removeGameFromUser(gameId: string) {
     return await this.fetch(`/users/games/${gameId}`, "DELETE");
   }
 
+  // Henter alle repositories for den aktuelle bruger
   public static async getRepositories(): Promise<string[]> {
     const res = await this.fetch("/users/repositories");
     if (res.status === 200) {
@@ -136,7 +127,7 @@ export class Api {
     }
   }
 
-  // Hent alle spil fra en bruger
+  // Henter alle spil tilhørende en bruger
   public static async getUserGames(): Promise<GameOwner[]> {
     const res = await this.fetch(`/users/games`);
     if (res.status === 200) {

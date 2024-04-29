@@ -1,4 +1,7 @@
-import React, { useContext } from "react";
+// Importering af 
+import { useContext } from "react";
+
+// Importering af nødvendige komponenter fra Mantine Core
 import {
   useMantineTheme,
   Group,
@@ -10,13 +13,22 @@ import {
   Button,
   Divider,
 } from "@mantine/core";
+
+// Importering af Api til at slette brugeren
 import { Api } from "../utils/api";
+
+// Importering af AuthContext fra AuthProvider til at tjekke om brugeren er logget ind
 import { AuthContext } from "../contexts/AuthProvider";
 
+// Definering af SettingsPage komponenten
 export function SettingsPage() {
+  // Definering af theme fra useMantineTheme
   const theme = useMantineTheme();
+
+  // Definering af bruger fra AuthContext
   const { user } = useContext(AuthContext);
 
+  // Returnering af SettingsPage komponenten
   return (
     <>
       <Container mt={"xl"}>
@@ -65,7 +77,7 @@ export function SettingsPage() {
                   Api.deleteUser();
                 }}
               >
-                Slæt konto
+                Slet konto
               </Button>
             )}
           </Flex>

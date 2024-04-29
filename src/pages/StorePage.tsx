@@ -1,5 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+// Importering af hooks fra react
+import { useContext, useEffect, useState } from "react";
+
+// Importering af nødvendige komponenter fra Matine Carousel
 import { Carousel } from "@mantine/carousel";
+
+// Importering af nødvendige komponenter fra Mantine Core
 import {
   Image,
   Paper,
@@ -19,23 +24,46 @@ import {
   Center,
   Loader,
 } from "@mantine/core";
+
+// Importering af Game fra prisma/client til at definere spil
 import { Game } from "@prisma/client";
+
+// Importering af Api til at hente spil fra databasen
 import { Api } from "../utils/api";
+
+// Importering af AuthContext fra AuthProvider til at tjekke om brugeren er logget ind
 import { AuthContext } from "../contexts/AuthProvider";
+
+// Importering af GameCardLarge komponenten fra components mappen
 import { GameCardLarge } from "../components/GameCardLarge";
+
+// Importering af nødvendige hooks fra Mantine
 import { useDebouncedState } from "@mantine/hooks";
 
+// Definering af StorePage komponenten
 export function StorePage() {
+  // Definering af games og setGames med useState
   const [games, setGames] = useState<Game[]>([]);
+  
+  // Definering af theme fra useMantineTheme
   const theme = useMantineTheme();
+  
+  // Definering af bruger fra AuthContext
   const { user } = useContext(AuthContext);
 
+  // Definering af søg og setSearch med useDebouncedState
   const [search, setSearch] = useDebouncedState("", 200);
+
+  // Definering af genres og setGenres med useState
   const [genres, setGenres] = useState<string[] | undefined>(undefined);
+  
+  // Definering af tags og setTags med useDebouncedState
   const [tags, setTags] = useDebouncedState<string[]>([], 200);
 
+  // Definering af loading og setLoading med useState
   const [loading, setLoading] = useState(true);
 
+  // useEffect hook til at hente spil fra databasen
   useEffect(() => {
     Api.getGames(
       search.length > 0 ? search : undefined,
@@ -48,6 +76,7 @@ export function StorePage() {
     });
   }, [search, genres, tags]);
 
+  // Funktion til at tilføje spil til bruger
   const addGameButton = (item: Game) => {
     return user ? (
       <SimpleGrid mt={"md"} cols={2} w={"100%"}>
@@ -76,6 +105,7 @@ export function StorePage() {
     );
   };
 
+  // Definering af featuredGames med de første 5 spil
   const featuredGames = games.slice(0, 5).map((item) => {
     return (
       <Carousel.Slide key={item.id}>
@@ -84,6 +114,7 @@ export function StorePage() {
     );
   });
 
+  // Definering af gridElements med spil
   const gridElements = games.map((item) => (
     <Paper
       key={item.id}
@@ -129,6 +160,7 @@ export function StorePage() {
     </Paper>
   ));
 
+  // Hvis loading er true, vises en loader
   if (loading)
     return (
       <Center pt={"xl"}>
@@ -136,6 +168,7 @@ export function StorePage() {
       </Center>
     );
 
+  // Returnering af komponenten
   return (
     <>
       <Box w="100%" bg={theme.colors[theme.primaryColor][1]} py="lg">

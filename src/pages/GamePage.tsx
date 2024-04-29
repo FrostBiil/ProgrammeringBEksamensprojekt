@@ -1,6 +1,13 @@
-import { useParams } from "react-router-dom";
-import { Api } from "../utils/api";
-import { useEffect, useState } from "react";
+// Henter useParams hook fra react-router-dom for at kunne tilgå URL-parametre.
+import { useParams } from "react-router-dom";  
+
+// Importerer Api modulet for at kunne foretage API kald.
+import { Api } from "../utils/api";  
+
+// Importerer hooks fra React til statshåndtering og sideeffekter.
+import { useEffect, useState } from "react";  
+
+// Importerer UI komponenter fra Mantine.
 import {
   Container,
   Paper,
@@ -18,8 +25,11 @@ import {
   SimpleGrid,
   Title,
 } from "@mantine/core";
+
+// Importerer Carousel komponent for billedefremvisning.
 import { Carousel } from "@mantine/carousel";
 
+// Definition af typen 'Game' for at strukturere spilinformation korrekt.
 interface Game {
   id: string;
   releaseDate: Date;
@@ -34,16 +44,19 @@ interface Game {
   screenshots: string[];
 }
 
+// Hovedkomponent for spilsiden, hvor specifikke spiloplysninger vises.
 export function GamePage() {
-  // /spil/:id
+  // Henter spil-ID fra URL'en ved hjælp af useParams hook.
   const { id } = useParams();
 
+  // Tilstandsværdier for spiloplysninger og indlæsningsstatus.
   const [game, setGame] = useState<Game | null>(null);
-
   const [loading, setLoading] = useState(true);
 
+  // Anvender tema fra Mantine for konsistent styling.
   const theme = useMantineTheme();
 
+  // Komponent der viser en download knap for spillet.
   const downloadGameButton = (item: Game) => {
     return (
       <Group mt="xs">
@@ -59,28 +72,32 @@ export function GamePage() {
     );
   };
 
+  // Funktion til at navigere brugeren tilbage til hjemmesiden.
   function goToHome() {
     window.location.href = "/";
   }
 
+  // Hook der henter spildata fra API ved komponentmontering eller når ID ændres.
   useEffect(() => {
     if (id === undefined) {
-      return;
+      return;  // Tidlig returnering hvis ID ikke er defineret.
     }
     Api.getGame(id).then((game) => {
-      setGame(game);
-
-      setLoading(false);
+      setGame(game);  // Gemmer spiloplysningerne i tilstand.
+      setLoading(false);  // Indikere at indlæsning er færdig.
     });
   }, [id]);
 
-  if (loading)
+  // Viser en loader mens data indlæses.
+  if (loading) {
     return (
       <Center pt={"xl"}>
         <Loader />
       </Center>
     );
+  }
 
+  // Viser en fejlmeddelelse hvis spillet ikke kunne findes.
   if (game === null) {
     return (
       <Container pt="80px" pb="80px">
@@ -90,7 +107,7 @@ export function GamePage() {
               Der er noget galt...
             </Title>
             <Text c="dimmed" size="lg">
-              Siden du forsøger at tilgå eksistere ikke. Du kan have skrevet den
+              Siden du forsøger at tilgå eksisterer ikke. Du kan have skrevet den
               forkerte webadresse, eller siden er blevet flyttet til en anden
               URL. Hvis dette er en fejl, kontakt support.
             </Text>
@@ -103,7 +120,8 @@ export function GamePage() {
     );
   }
 
-  return (
+  // Hovedvisning af spiloplysninger når data er tilgængelige.
+    return (
     <>
       <Container mt={"xl"}>
         <Paper withBorder shadow={"md"} p={"md"}>
