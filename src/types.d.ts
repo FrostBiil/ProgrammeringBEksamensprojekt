@@ -1,8 +1,10 @@
+// Denne fil indeholder TypeScript type-deklarationer, som kan bruges til at beskrive typer og interfaces, der bruges i projektet.
 declare module "*.module.css" {
     const content: Record<string, string>;
     export default content;
   }
 
+// Deklarerer et interface User, som beskriver en bruger i applikationen.
 interface User {
 //     id          String @unique
 //   accessToken String @unique

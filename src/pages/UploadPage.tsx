@@ -1,4 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+// Importering af nødvendige komponenter fra react
+import { useContext, useEffect, useState } from "react";
+
+// Importering af nødvendige komponenter fra Mantine
 import {
   Autocomplete,
   Button,
@@ -13,12 +16,23 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
+
+// Importering af useForm fra @mantine/form
 import { useForm } from "@mantine/form";
+
+// Importering af Dropzone til at uploade billeder
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+
+// Importering af ImageConverter til at konvertere billeder til base64
 import { ImageConverter } from "../utils/imageConverter";
+
+// Importering af Api til at uploade spil
 import { Api } from "../utils/api";
+
+// Importering af AuthContext til at tjekke om brugeren er logget ind
 import { AuthContext } from "../contexts/AuthProvider";
 
+// Definering af FormValues interface
 interface FormValues {
   projectUrl: string;
   title: string;
@@ -29,6 +43,7 @@ interface FormValues {
   termsOfService: boolean[];
 }
 
+// Definering af Genres array
 const Genres = [
   "Action",
   "Adventure",
@@ -42,15 +57,24 @@ const Genres = [
   "Strategy",
 ];
 
+// Definering af UploadPage komponenten
 export function UploadPage() {
+  // Definering af state til at gemme frontbillede
   const [cover, setCoverImage] = useState<string | undefined>(undefined);
+  
+  // Henter bruger og om bruger er loaded fra AuthContext
   const { user, loaded } = useContext(AuthContext);
+
+  // Definering af state til at gemme skærmbilleder
   const [screenshots, setScreenshots] = useState<string[]>([]);
 
+  // Definering af state til at gemme projekter
   const [projects, setProjects] = useState<string[]>([]);
 
+  // Definering af theme fra useMantineTheme
   const theme = useMantineTheme();
 
+  // Definering af form fra useForm
   const form = useForm<FormValues>({
     initialValues: {
       projectUrl: "",
@@ -62,17 +86,27 @@ export function UploadPage() {
       termsOfService: [],
     },
 
+    // Validering af form
     validate: {
+      // Validering af projectUrl tjekker om værdien er en URL
       projectUrl: (value) =>
         /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_~#?&//=]*)$/.test(
           value
         )
           ? null
           : "Ugyldig URL",
+      
+      // Validering af title tjekker om værdien er tom
       title: (value) => (value.trim() ? null : "Titel er påkrævet"),
+      
+      // Validering af description tjekker om værdien er tom
       description: (value) => (value.trim() ? null : "Beskrivelse er påkrævet"),
+      
+      // Validering af tags tjekker om værdien er tom
       genres: (value) =>
         value.length > 0 ? null : "Mindst 1 genre er påkrævet",
+      
+      // Validering af visibility tjekker om værdien er "Private" eller "Public"
       visibility: (value) =>
         ["Private", "Public"].includes(value)
           ? null
@@ -80,6 +114,7 @@ export function UploadPage() {
     },
   });
 
+  // Definering af formItemsText array
   const formItemsText = [
     {
       withAsterisk: true,
@@ -97,14 +132,18 @@ export function UploadPage() {
     },
   ];
 
+  // useEffect hook der køres når komponenten mountes
   useEffect(() => {
 
+    // Hvis bruger ikke er loaded, så returneres der
     if (!loaded) return;
 
+    // Hvis bruger ikke er logget ind, så logges bruger ind
     if (!user) {
       Api.login();
     }
 
+    // Henter projekter fra backend hvis bruger er logget ind
     if (user) {
       Api.getRepositories().then((projects) => {
         setProjects(projects);
@@ -112,8 +151,9 @@ export function UploadPage() {
     }
   }, [user, loaded]);
 
+  // Returnerer UploadPage komponenten
   return (
-    <Container mt={"xl"}>
+    <Container py={"xl"}>
       <Paper shadow="md" p="xl">
         <h2>Upload et nyt projekt</h2>
         <form
@@ -135,7 +175,7 @@ export function UploadPage() {
 
               <Autocomplete pt="md"
                 data={projects}
-                label="GitHub URL"
+                label="Github URL"
                 withAsterisk
                 placeholder="https://github.com/user/repo"
                 {...form.getInputProps("projectUrl")}
